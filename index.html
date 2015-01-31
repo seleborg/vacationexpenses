@@ -1,14 +1,23 @@
 <!doctype html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="vacationExpensesApp">
 <head>
 	<meta charset="utf-8">
 	<title>Vacation Expenses</title>
 	<script src="lib/angular/angular.js"></script>
+	<script src="js/expensesCtrl.js"></script>
 </head>
-<body>
-<header>
+<body ng-controller="ExpensesCtrl">
+
 <h1>Vacation Expenses</h1>
 Find out who should pay what at the end of a common vacation.
-</header>
+
+<h2>Who paid what?</h2>
+<ul>
+	<li ng-repeat="expense in expenses"><div>
+		<input type="text" ng-model="expense.person">
+		<input type="text" ng-model="expense.amount">
+		<input type="text" ng-model="expense.purpose">
+	</div>
+</ul>
 </body>
 </html>
