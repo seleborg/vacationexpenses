@@ -18,14 +18,26 @@ Find out who should pay what at the end of a common vacation.
 		<input type="text" ng-model="expense.amount">
 		<input type="text" ng-model="expense.purpose">
 	</div>
+	<div>
+		<div><input type="checkbox" ng-model="expense.sharingModel.equalShares">Equal shares</input></div>
+		<div>
+			<ul>
+				<li ng-repeat="(name, share) in expense.sharingModel.shares"><div>
+					<span>{{name}}</span>
+					<input type="text" ng-model="expense.sharingModel.shares[name]">
+				</div>
+			</ul>
+		</div>
+	</div>
 </ul>
 
 <h2>Totals</h2>
 <table>
-	<tr><th>Person</th><th>Total paid</th></tr>
+	<tr><th>Person</th><th>Total paid</th><th>Total due</th></tr>
 	<tr ng-repeat="person in people">
 		<td><span>{{person.name}}</span></td>
 		<td><span>{{person.totalPaid}}</span></td>
+		<td><span>{{person.totalDue}}</span></td>
 	</tr>
 </table>
 </body>
