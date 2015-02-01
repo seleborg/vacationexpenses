@@ -19,5 +19,14 @@ Find out who should pay what at the end of a common vacation.
 		<input type="text" ng-model="expense.purpose">
 	</div>
 </ul>
+
+<h2>Totals</h2>
+<table>
+	<tr><th>Person</th><th>Total paid</th></tr>
+	<tr ng-repeat="person in people">
+		<td><span>{{person.name}}</span></td>
+		<td><span>{{person.totalPaid}}</span></td>
+	</tr>
+</table>
 </body>
 </html>
