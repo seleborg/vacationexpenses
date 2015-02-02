@@ -34,36 +34,31 @@ function recreatePeople(expenses) {
 function initPeople(expenses) {
 	var people = {};
 
-	for (var i = 0; i < expenses.length; i++) {
-		var person = {
-			name: expenses[i].person,
+	angular.forEach(expenses, function(expense) {
+		people[expense.person] = {
+			name: expense.person,
 			paid: [],
 			due: [],
 			totalPaid: 0,
 			totalDue: 0
 		};
-		people[expenses[i].person] = person;
-	}
+	});
 
 	return people;
 }
 
 
 function collectPaid(people, expenses) {
-	for(var i = 0; i < expenses.length; i++) {
-		var expense = expenses[i];
-		var name = expense.person;
-		var person = people[name];
-		person.paid.push(Number(expense.amount));
-	}
+	angular.forEach(expenses, function(expense) {
+		people[expense.person].paid.push(Number(expense.amount));
+	});
 
-	return people;	
+	return people;
 }
 
 
 function collectDue(people, expenses) {
-	for (var i = 0; i < expenses.length; i++) {
-		var expense = expenses[i];
+	angular.forEach(expenses, function(expense) {
 		var amount = Number(expense.amount);
 		var shares = sumShares(expense);
 
@@ -71,7 +66,7 @@ function collectDue(people, expenses) {
 			people[name].due.push(
 				amount * (expense.sharingModel.equalShares ? 1 : Number(share)) / shares);
 		});
-	}
+	});
 
 	return people;
 }
@@ -87,22 +82,21 @@ function sumShares(expense) {
 
 
 function computeTotalPaidAndDuePerPerson(people) {
-	for (name in people) {
-		var person = people[name];
+	angular.forEach(people, function(person, name) {
 		var totalPaid = 0;
-		for (var i = 0; i < person.paid.length; i++) {
-			totalPaid += person.paid[i];
-		}
+		angular.forEach(person.paid, function(amount) {
+			totalPaid += amount;
+		});
 
 		person.totalPaid = totalPaid;
 
 		var totalDue = 0;
-		for (var j = 0; j < person.due.length; j++) {
-			totalDue += person.due[j];
-		}
-
+		angular.forEach(person.due, function(amount) {
+			totalDue += amount;
+		});
+		
 		person.totalDue = totalDue;
-	}
+	});
 
 	return people;
 }
