@@ -1,5 +1,6 @@
 function recreatePeople(expenses) {
 	var people = initPeople(expenses);
+	fixShares(expenses, people);
 	people = collectPaid(people, expenses);
 	people = collectDue(people, expenses);
 	return computeTotalPaidAndDuePerPerson(people);
@@ -72,4 +73,25 @@ function sum(array) {
 		sum += Number(value);
 	});
 	return sum;
+}
+
+
+function fixShares(expenses, people) {
+	angular.forEach(people, function(person, name) {
+		angular.forEach(expenses, function(expense) {
+			if (!expense.sharingModel.shares[name]) {
+				expense.sharingModel.shares[name] = 1;
+			}
+		});
+	});
+
+	angular.forEach(expenses, function(expense) {
+		var newShares = {};
+		angular.forEach(expense.sharingModel.shares, function (share, name) {
+			if (name in people) {
+				newShares[name] = share;
+			}
+		});
+		expense.sharingModel.shares = newShares;
+	});
 }
