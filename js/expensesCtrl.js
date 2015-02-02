@@ -63,8 +63,8 @@ function collectDue(people, expenses) {
 		var shares = sumShares(expense);
 
 		angular.forEach(expense.sharingModel.shares, function(share, name) {
-			people[name].due.push(
-				amount * (expense.sharingModel.equalShares ? 1 : Number(share)) / shares);
+			var due = amount * (expense.sharingModel.equalShares ? 1 : Number(share)) / shares;
+			people[name].due.push(due);
 		});
 	});
 
