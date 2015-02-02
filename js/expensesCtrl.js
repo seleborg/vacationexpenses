@@ -83,20 +83,18 @@ function sumShares(expense) {
 
 function computeTotalPaidAndDuePerPerson(people) {
 	angular.forEach(people, function(person, name) {
-		var totalPaid = 0;
-		angular.forEach(person.paid, function(amount) {
-			totalPaid += amount;
-		});
-
-		person.totalPaid = totalPaid;
-
-		var totalDue = 0;
-		angular.forEach(person.due, function(amount) {
-			totalDue += amount;
-		});
-		
-		person.totalDue = totalDue;
+		person.totalPaid = sum(person.paid);
+		person.totalDue = sum(person.due);
 	});
 
 	return people;
+}
+
+
+function sum(array) {
+	var sum = 0;
+	angular.forEach(array, function(value) {
+		sum += Number(value);
+	});
+	return sum;
 }
