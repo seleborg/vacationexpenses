@@ -11,8 +11,8 @@ function initPeople(expenses) {
 	var people = {};
 
 	angular.forEach(expenses, function(expense) {
-		people[expense.person] = {
-			name: expense.person,
+		people[expense.name] = {
+			name: expense.name,
 			paid: [],
 			due: [],
 			totalPaid: 0,
@@ -26,7 +26,7 @@ function initPeople(expenses) {
 
 function collectPaid(people, expenses) {
 	angular.forEach(expenses, function(expense) {
-		people[expense.person].paid.push(Number(expense.amount));
+		people[expense.name].paid.push(Number(expense.amount));
 	});
 
 	return people;
