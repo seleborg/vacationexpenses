@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/seleborg/vacationexpenses/issues"
   },
-  "homepage": "https://github.com/seleborg/vacationexpenses"
+  "homepage": "https://github.com/seleborg/vacationexpenses",
+  "dependencies": {
+    "express": "^4.11.2",
+    "serve-static": "^1.8.1"
+  }
 }
