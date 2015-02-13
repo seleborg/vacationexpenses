@@ -31,8 +31,12 @@ vacationExpensesApp.controller('ExpensesCtrl', function ($scope) {
 
 	$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 
-	$scope.addExpense = function() {
+	$scope.addExpense = function () {
 		$scope.expenses.push($scope.newExpense);
 		$scope.newExpense = angular.copy(EMPTY_EXPENSE);
+	};
+
+	$scope.deleteExpense = function (index) {
+		$scope.expenses.splice(index, 1);
 	};
 });
