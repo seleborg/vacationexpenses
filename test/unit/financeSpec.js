@@ -33,6 +33,19 @@ describe('finance', function () {
 		});
 
 
+		it("leaves an empty share value empty and treats it as 0", function () {
+			var expenses = [
+				{ name: "Joe", amount: 10, 
+					sharingModel: { equalShares: false, shares: {Joe: ""}}}
+			];
+
+			var result = recalculateResult(expenses);
+
+			expect(expenses[0].sharingModel.shares["Joe"]).toBe("");
+			expect(result['Joe'].totalDue).toBe(0);
+		});
+
+
 		it("works with only one expense", function () {
 			var expenses = [
 				{ name: "Joe", amount: 10, 

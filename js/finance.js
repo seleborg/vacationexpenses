@@ -8,7 +8,7 @@ financeModule.service('recalculateResult', function () {
 		people = collectDue(people, expenses);
 		return computeTotalPaidAndDuePerPerson(people);
 	};
-	
+
 
 	function initPeople(expenses) {
 		var people = {};
@@ -42,7 +42,12 @@ financeModule.service('recalculateResult', function () {
 			var shares = sumShares(expense);
 
 			angular.forEach(expense.sharingModel.shares, function(share, name) {
-				var due = amount * (expense.sharingModel.equalShares ? 1 : Number(share)) / shares;
+				if (shares == 0) {
+					var due = 0;
+				}
+				else {
+					var due = amount * (expense.sharingModel.equalShares ? 1 : Number(share)) / shares;
+				}
 				people[name].due.push(due);
 			});
 		});
@@ -82,7 +87,7 @@ financeModule.service('recalculateResult', function () {
 	function fixShares(expenses, people) {
 		angular.forEach(people, function(person, name) {
 			angular.forEach(expenses, function(expense) {
-				if (!expense.sharingModel.shares[name]) {
+				if (!expense.sharingModel.shares.hasOwnProperty(name)) {
 					expense.sharingModel.shares[name] = 1;
 				}
 			});
