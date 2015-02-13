@@ -1,7 +1,7 @@
-var vacationExpensesApp = angular.module('vacationExpensesApp', []);
+var vacationExpensesApp = angular.module('vacationExpensesApp', ['finance']);
 
 
-vacationExpensesApp.controller('ExpensesCtrl', function ($scope) {
+vacationExpensesApp.controller('ExpensesCtrl', ['$scope', 'recalculateResult', function ($scope, recalculateResult) {
 	$scope.expenses = [
 		{name: "Joe", amount: "99", purpose: "Whisky",
 			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
@@ -39,4 +39,4 @@ vacationExpensesApp.controller('ExpensesCtrl', function ($scope) {
 	$scope.deleteExpense = function (index) {
 		$scope.expenses.splice(index, 1);
 	};
-});
+}]);
