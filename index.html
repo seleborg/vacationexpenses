@@ -31,13 +31,16 @@ Find out who should pay what at the end of a common vacation.
 			</ul>
 		</div>
 	</li>
+	<li>
+		<form ng-submit="addExpense()">
+			<input type="text" ng-model="newExpense.name">
+			<input type="text" ng-model="newExpense.amount">
+			<input type="text" ng-model="newExpense.purpose">
+			<input type="submit" value="Add">
+		</form>
+	</li>
 </ul>
-<form ng-submit="addExpense()">
-	<input type="text" ng-model="newExpense.name">
-	<input type="text" ng-model="newExpense.amount">
-	<input type="text" ng-model="newExpense.purpose">
-	<br><input type="submit" value="Add">
-</form>
+
 
 <h2>Totals</h2>
 <table>
