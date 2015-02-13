@@ -20,4 +20,19 @@ vacationExpensesApp.controller('ExpensesCtrl', function ($scope) {
 	$scope.$watch('expenses', function (value) {
 		$scope.people = recreatePeople(value);
 	}, true);
+
+
+	var EMPTY_EXPENSE = {
+		name: "",
+		amount: "",
+		purpose: "",
+		sharingModel: { equalShares: true, shares: {} }
+	};
+
+	$scope.newExpense = angular.copy(EMPTY_EXPENSE);
+
+	$scope.addExpense = function() {
+		$scope.expenses.push($scope.newExpense);
+		$scope.newExpense = angular.copy(EMPTY_EXPENSE);
+	};
 });
