@@ -1,0 +1,91 @@
+describe('finance', function () {
+	beforeEach(module('finance'));
+
+	describe("recalculateResult", function () {
+		var recalculateResult;
+
+		beforeEach(function () {
+			recalculateResult = angular.injector(['finance']).get('recalculateResult');
+		});
+
+
+		it("adds missing shares", function () {
+			var expenses = [
+				{ name: "Joe", amount: 10, 
+					sharingModel: { equalShares: true, shares: {}}}
+			];
+
+			recalculateResult(expenses);
+
+			expect(expenses[0].sharingModel.shares['Joe']).toBeDefined();
+		});
+
+
+		it("removes extraneous shares", function () {
+			var expenses = [
+				{ name: "Joe", amount: 10, 
+					sharingModel: { equalShares: true, shares: {Sara: 1}}}
+			];
+
+			recalculateResult(expenses);
+
+			expect(expenses[0].sharingModel.shares['Sara']).toBeUndefined();
+		});
+
+
+		it("works with only one expense", function () {
+			var expenses = [
+				{ name: "Joe", amount: 10, 
+					sharingModel: { equalShares: true, shares: {}}}
+			];
+
+			var result = recalculateResult(expenses);
+			var joe = result["Joe"];
+			expect(joe.name).toBe("Joe");
+			expect(joe.totalPaid).toBe(10);
+			expect(joe.totalDue).toBe(10);
+		});
+
+
+		it("divides due in two with equal shares", function () {
+			var expenses = [
+				{ name: "Joe", amount: 10, 
+					sharingModel: { equalShares: true, shares: {}}},
+				{ name: "Sara", amount: 0,
+					sharingModel: { equalShares: true, shares: {}}}
+			];
+
+			var result = recalculateResult(expenses);
+			var joe = result["Joe"];
+			expect(joe.name).toBe("Joe");
+			expect(joe.totalPaid).toBe(10);
+			expect(joe.totalDue).toBe(5);
+
+			var sara = result["Sara"];
+			expect(sara.name).toBe("Sara");
+			expect(sara.totalPaid).toBe(0);
+			expect(sara.totalDue).toBe(5);
+		});
+
+
+		it("divides due accordingly with unequal shares", function () {
+			var expenses = [
+				{ name: "Joe", amount: 30, 
+					sharingModel: { equalShares: false, shares: {Joe: 1, Sara: 2}}},
+				{ name: "Sara", amount: 0,
+					sharingModel: { equalShares: true, shares: {}}}
+			];
+
+			var result = recalculateResult(expenses);
+			var joe = result["Joe"];
+			expect(joe.name).toBe("Joe");
+			expect(joe.totalPaid).toBe(30);
+			expect(joe.totalDue).toBe(10);
+
+			var sara = result["Sara"];
+			expect(sara.name).toBe("Sara");
+			expect(sara.totalPaid).toBe(0);
+			expect(sara.totalDue).toBe(20);
+		});
+	});
+});
