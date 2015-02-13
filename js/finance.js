@@ -1,4 +1,4 @@
-function recreatePeople(expenses) {
+function recalculateResult(expenses) {
 	var people = initPeople(expenses);
 	fixShares(expenses, people);
 	people = collectPaid(people, expenses);

@@ -15,10 +15,10 @@ vacationExpensesApp.controller('ExpensesCtrl', function ($scope) {
 			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}}
 	];
 
-	$scope.people = {};
+	$scope.result = {};
 
 	$scope.$watch('expenses', function (value) {
-		$scope.people = recreatePeople(value);
+		$scope.result = recalculateResult(value);
 	}, true);
 
 

@@ -45,7 +45,7 @@ Find out who should pay what at the end of a common vacation.
 <h2>Totals</h2>
 <table>
 	<tr><th>Person</th><th>Total paid</th><th>Total due</th><th>Balance</th></tr>
-	<tr ng-repeat="person in people">
+	<tr ng-repeat="person in result">
 		<td><span>{{person.name}}</span></td>
 		<td><span>{{person.totalPaid | currency}}</span></td>
 		<td><span>{{person.totalDue | currency}}</span></td>
