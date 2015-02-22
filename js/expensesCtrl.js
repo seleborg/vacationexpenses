@@ -15,11 +15,12 @@ vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 
 			}
 		})
 		.error(function (data, status, headers, config) {
-			// TODO: Handle error
+			$scope.error = { status: status };
 		});
 
 
 	$scope.billLoaded = false;
+	$scope.error = null;
 	$scope.expenses = [];
 	$scope.result = {};
 

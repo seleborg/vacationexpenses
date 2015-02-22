@@ -13,7 +13,7 @@
 <h1>Vacation Expenses</h1>
 Find out who should pay what at the end of a common vacation.
 
-<div ng-show="!billLoaded">
+<div ng-show="!billLoaded && !error">
 Loading bill...
 </div>
 <div ng-show="billLoaded">
@@ -57,6 +57,14 @@ Loading bill...
 			<td><span>{{person.totalPaid - person.totalDue | currency}}</span></td>
 		</tr>
 	</table>
+</div>
+<div ng-show="error">
+	<div ng-show="error.status == 404">
+		<h1>Not found</h1>
+	</div>
+	<div ng-show="error.status != 404">
+		<h1>Error</h1>
+	</div>
 </div>
 </body>
 </html>
