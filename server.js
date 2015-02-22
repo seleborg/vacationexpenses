@@ -17,4 +17,9 @@ app.get('/bills/*', function (req, res) {
 app.use('/js', express.static(__dirname + '/js'));
 app.use('/lib', express.static(__dirname + '/lib'));
 
+app.get('/*', function (req, res) {
+	var url = req.params[0];
+	res.sendFile(__dirname + '/bill.html');
+});
+
 app.listen(process.env.PORT || 3000);
