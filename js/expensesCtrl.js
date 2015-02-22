@@ -6,19 +6,9 @@ vacationExpensesApp.config(['$locationProvider', function ($locationProvider) {
 
 
 vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', 'recalculateResult', function ($scope, $location, recalculateResult) {
-	$scope.expenses = [
-		{name: "Joe", amount: "99", purpose: "Whisky",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Laura", amount: "12", purpose: "Cheese",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Laura", amount: "37", purpose: "Restaurant Saturday",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Joe", amount: "45", purpose: "Movie",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Joe", amount: "12", purpose: "Coffee",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}}
-	];
 
+	$scope.billLoaded = false;
+	$scope.expenses = [];
 	$scope.result = {};
 
 	$scope.$watch('expenses', function (value) {
