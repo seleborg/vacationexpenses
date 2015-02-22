@@ -1,7 +1,11 @@
 var vacationExpensesApp = angular.module('vacationExpensesApp', ['finance']);
 
+vacationExpensesApp.config(['$locationProvider', function ($locationProvider) {
+	$locationProvider.html5Mode(true);
+}]);
 
-vacationExpensesApp.controller('ExpensesCtrl', ['$scope', 'recalculateResult', function ($scope, recalculateResult) {
+
+vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', 'recalculateResult', function ($scope, $location, recalculateResult) {
 	$scope.expenses = [
 		{name: "Joe", amount: "99", purpose: "Whisky",
 			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
