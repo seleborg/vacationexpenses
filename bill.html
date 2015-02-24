@@ -19,7 +19,7 @@ Loading bill...
 <div ng-show="billLoaded">
 	<h2>Who paid what?</h2>
 	<ul>
-		<li ng-repeat="expense in expenses">
+		<li ng-repeat="expense in bill.expenses">
 			<div>
 				<input type="text" ng-model="expense.name">
 				<input type="text" ng-model="expense.amount">

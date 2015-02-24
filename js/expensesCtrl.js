@@ -10,7 +10,7 @@ vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 
 	$http.get('/bills/' + $scope.url)
 		.success(function (data, status, headers, config) {
 			if (status == 200) {
-				$scope.expenses = data.bill.expenses;
+				$scope.bill = data.bill;
 				$scope.billLoaded = true;
 			}
 		})
@@ -21,11 +21,13 @@ vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 
 
 	$scope.billLoaded = false;
 	$scope.error = null;
-	$scope.expenses = [];
-	$scope.result = {};
+	$scope.bill = null;
+	$scope.result = null;
 
-	$scope.$watch('expenses', function (value) {
-		$scope.result = recalculateResult(value);
+	$scope.$watch('bill', function (bill) {
+		if (bill) {
+			$scope.result = recalculateResult(bill);
+		}
 	}, true);
 
 
@@ -39,11 +41,11 @@ vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 
 	$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 
 	$scope.addExpense = function () {
-		$scope.expenses.push($scope.newExpense);
+		$scope.bill.expenses.push($scope.newExpense);
 		$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 	};
 
 	$scope.deleteExpense = function (index) {
-		$scope.expenses.splice(index, 1);
+		$scope.bill.expenses.splice(index, 1);
 	};
 }]);

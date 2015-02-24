@@ -1,11 +1,11 @@
 var financeModule = angular.module('finance', []);
 
 financeModule.service('recalculateResult', function () {
-	return function (expenses) {
-		var people = initPeople(expenses);
-		fixShares(expenses, people);
-		people = collectPaid(people, expenses);
-		people = collectDue(people, expenses);
+	return function (bill) {
+		var people = initPeople(bill.expenses);
+		fixShares(bill.expenses, people);
+		people = collectPaid(people, bill.expenses);
+		people = collectDue(people, bill.expenses);
 		return computeTotalPaidAndDuePerPerson(people);
 	};
 
