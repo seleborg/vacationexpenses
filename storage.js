@@ -1,6 +1,7 @@
 var azureStorage = require('azure-storage');
 
 var tableService = azureStorage.createTableService();
+var entGen = azureStorage.TableUtilities.entityGenerator;
 
 var TABLE_NAME = 'bills';
 var PARTITION_KEY = 'bills';
@@ -60,6 +61,9 @@ exports.storeBill = function (url, data, callback) {
 		response.bill = data.bill;
 		callback(200);
 	}
+	else {
+		storeBillIntoAzureStorage(url, data, callback);
+	}
 }
 
 
@@ -86,5 +90,19 @@ function fetchBillFromAzureStorage(url, callback) {
 				bill: JSON.parse(entry.bill['_'])
 			});
 		}
+	});
+}
+
+
+function storeBillIntoAzureStorage(url, data, callback) {
+	var billEntity = {
+		PartitionKey: entGen.String(PARTITION_KEY),
+		RowKey: entGen.String(url),
+		version: entGen.Int32(data.version),
+		bill: entGen.String(JSON.stringify(data.bill))
+	};
+
+	tableService.updateEntity(TABLE_NAME, billEntity, function (error, result, response) {
+		callback(response.statusCode);
 	});
 }
