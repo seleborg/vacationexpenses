@@ -1,24 +1,39 @@
 var vacationExpensesApp = angular.module('vacationExpensesApp', ['finance']);
 
+vacationExpensesApp.config(['$locationProvider', function ($locationProvider) {
+	$locationProvider.html5Mode(true);
+}]);
 
-vacationExpensesApp.controller('ExpensesCtrl', ['$scope', 'recalculateResult', function ($scope, recalculateResult) {
-	$scope.expenses = [
-		{name: "Joe", amount: "99", purpose: "Whisky",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Laura", amount: "12", purpose: "Cheese",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Laura", amount: "37", purpose: "Restaurant Saturday",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Joe", amount: "45", purpose: "Movie",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-		{name: "Joe", amount: "12", purpose: "Coffee",
-			sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}}
-	];
 
-	$scope.result = {};
+vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 'recalculateResult', function ($scope, $location, $http, recalculateResult) {
+	$scope.url = $location.path().split('/', 2)[1];
+	$http.get('/api/v1/bills/' + $scope.url)
+		.success(function (data, status, headers, config) {
+			if (status == 200) {
+				$scope.bill = data.bill;
+				$scope.billLoaded = true;
+			}
+		})
+		.error(function (data, status, headers, config) {
+			$scope.error = { status: status };
+		});
 
-	$scope.$watch('expenses', function (value) {
-		$scope.result = recalculateResult(value);
+
+	$scope.billLoaded = false;
+	$scope.error = null;
+	$scope.bill = null;
+	$scope.result = null;
+
+	$scope.$watch('bill', function (bill) {
+		if (bill) {
+			$scope.result = recalculateResult(bill);
+
+			var data = {
+				version: 1,
+				bill: $scope.bill
+			};
+			$http.put('/api/v1/bills/' + $scope.url, data);
+		}
 	}, true);
 
 
@@ -32,11 +47,11 @@ vacationExpensesApp.controller('ExpensesCtrl', ['$scope', 'recalculateResult', f
 	$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 
 	$scope.addExpense = function () {
-		$scope.expenses.push($scope.newExpense);
+		$scope.bill.expenses.push($scope.newExpense);
 		$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 	};
 
 	$scope.deleteExpense = function (index) {
-		$scope.expenses.splice(index, 1);
+		$scope.bill.expenses.splice(index, 1);
 	};
 }]);
