@@ -7,7 +7,7 @@ vacationExpensesApp.config(['$locationProvider', function ($locationProvider) {
 
 vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 'recalculateResult', function ($scope, $location, $http, recalculateResult) {
 	$scope.url = $location.path().split('/', 2)[1];
-	$http.get('/bills/' + $scope.url)
+	$http.get('/api/v1/bills/' + $scope.url)
 		.success(function (data, status, headers, config) {
 			if (status == 200) {
 				$scope.bill = data.bill;
@@ -32,7 +32,7 @@ vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 
 				version: 1,
 				bill: $scope.bill
 			};
-			$http.put('/bills/' + $scope.url, data);
+			$http.put('/api/v1/bills/' + $scope.url, data);
 		}
 	}, true);
 

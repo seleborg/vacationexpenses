@@ -10,13 +10,13 @@ app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/bills/*', function (req, res) {
+app.get('/api/v1/bills/*', function (req, res) {
 	var url = req.params[0];
 	storage.fetchBill(url, function (response) {
 		res.status(response.status).json(response);
 	});
 });
-app.put('/bills/*', function (req, res) {
+app.put('/api/v1/bills/*', function (req, res) {
 	var url = req.params[0];
 	storage.storeBill(url, req.body, function (status) {
 		res.status(status).end();
