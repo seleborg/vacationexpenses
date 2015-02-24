@@ -1,7 +1,10 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var storage = require('./storage.js');
 
 var app = express();
+
+app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index.html');
@@ -11,6 +14,12 @@ app.get('/bills/*', function (req, res) {
 	var url = req.params[0];
 	storage.fetchBill(url, function (response) {
 		res.status(response.status).json(response);
+	});
+});
+app.put('/bills/*', function (req, res) {
+	var url = req.params[0];
+	storage.storeBill(url, req.body, function (status) {
+		res.status(status).end();
 	});
 });
 

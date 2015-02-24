@@ -27,6 +27,12 @@ vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 
 	$scope.$watch('bill', function (bill) {
 		if (bill) {
 			$scope.result = recalculateResult(bill);
+
+			var data = {
+				version: 1,
+				bill: $scope.bill
+			};
+			$http.put('/bills/' + $scope.url, data);
 		}
 	}, true);
 

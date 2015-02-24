@@ -47,6 +47,22 @@ exports.fetchBill = function (url, callback) {
 }
 
 
+// Updates a bill identified by its URL.
+// callback = function (status) {}
+// data = {
+//		version: <bill structure version>,
+//		bill: <bill structure>
+// };
+exports.storeBill = function (url, data, callback) {
+	if (url in testBills) {
+		var response = testBills[url];
+		response.version = data.version;
+		response.bill = data.bill;
+		callback(200);
+	}
+}
+
+
 function fetchBillFromAzureStorage(url, callback) {
 	var query = new azureStorage.TableQuery()
 		.where('PartitionKey eq ?', PARTITION_KEY)
