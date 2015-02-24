@@ -42,11 +42,28 @@ exports.fetchBill = function (url, callback) {
 		callback(response);
 	}
 	else {
-		callback({
-			status: 404,
-			url: url,
-			version: null,
-			bill: null,
+		var query = new azureStorage.TableQuery()
+			.where('PartitionKey eq ?', PARTITION_KEY)
+			.and('RowKey eq ?', url);
+
+		tableService.queryEntities(TABLE_NAME, query, null, function (error, result, response) {
+			if (error || !response.isSuccessful) {
+				callback({
+					status: response.statusCode,
+					url: url,
+					version: null,
+					bill: null
+				});
+			}
+			else {
+				var entry = result.entries[0];
+				callback({
+					status: response.statusCode,
+					url: url,
+					version: entry.version['_'],
+					bill: JSON.parse(entry.bill['_'])
+				});
+			}
 		});
 	}
 }
