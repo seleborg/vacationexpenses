@@ -5,7 +5,19 @@ vacationExpensesApp.config(['$locationProvider', function ($locationProvider) {
 }]);
 
 
-vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', 'recalculateResult', function ($scope, $location, recalculateResult) {
+vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 'recalculateResult', function ($scope, $location, $http, recalculateResult) {
+	$scope.url = $location.path().split('/', 2)[1];
+	$http.get('/bills/' + $scope.url)
+		.success(function (data, status, headers, config) {
+			if (status == 200) {
+				$scope.expenses = data.bill.expenses;
+				$scope.billLoaded = true;
+			}
+		})
+		.error(function (data, status, headers, config) {
+			// TODO: Handle error
+		});
+
 
 	$scope.billLoaded = false;
 	$scope.expenses = [];
