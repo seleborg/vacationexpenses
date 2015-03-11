@@ -30,7 +30,7 @@ app.use('/lib', express.static(__dirname + '/lib'));
 
 app.get('/*', function (req, res) {
 	var url = req.params[0];
-	res.sendFile(__dirname + '/bill.html');
+	res.sendFile(__dirname + '/client/bill.html');
 });
 
 app.listen(PORT);
