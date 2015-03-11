@@ -1,3 +1,5 @@
+var PORT = process.env.PORT || 3000;
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var storage = require('./storage.js');
@@ -31,4 +33,4 @@ app.get('/*', function (req, res) {
 	res.sendFile(__dirname + '/bill.html');
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(PORT);
