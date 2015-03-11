@@ -10,49 +10,49 @@ describe('finance', function () {
 
 
 		it("adds missing shares", function () {
-			var expenses = [
-				{ name: "Joe", amount: 10, 
+			var bill = { expenses: [
+				{ name: "Joe", amount: 10,
 					sharingModel: { equalShares: true, shares: {}}}
-			];
+			]};
 
-			recalculateResult(expenses);
+			recalculateResult(bill);
 
-			expect(expenses[0].sharingModel.shares['Joe']).toBeDefined();
+			expect(bill.expenses[0].sharingModel.shares['Joe']).toBeDefined();
 		});
 
 
 		it("removes extraneous shares", function () {
-			var expenses = [
-				{ name: "Joe", amount: 10, 
+			var bill = {expenses: [
+				{ name: "Joe", amount: 10,
 					sharingModel: { equalShares: true, shares: {Sara: 1}}}
-			];
+			]};
 
-			recalculateResult(expenses);
+			recalculateResult(bill);
 
-			expect(expenses[0].sharingModel.shares['Sara']).toBeUndefined();
+			expect(bill.expenses[0].sharingModel.shares['Sara']).toBeUndefined();
 		});
 
 
 		it("leaves an empty share value empty and treats it as 0", function () {
-			var expenses = [
-				{ name: "Joe", amount: 10, 
+			var bill = {expenses: [
+				{ name: "Joe", amount: 10,
 					sharingModel: { equalShares: false, shares: {Joe: ""}}}
-			];
+			]};
 
-			var result = recalculateResult(expenses);
+			var result = recalculateResult(bill);
 
-			expect(expenses[0].sharingModel.shares["Joe"]).toBe("");
+			expect(bill.expenses[0].sharingModel.shares["Joe"]).toBe("");
 			expect(result['Joe'].totalDue).toBe(0);
 		});
 
 
 		it("works with only one expense", function () {
-			var expenses = [
-				{ name: "Joe", amount: 10, 
+			var bill = {expenses: [
+				{ name: "Joe", amount: 10,
 					sharingModel: { equalShares: true, shares: {}}}
-			];
+			]};
 
-			var result = recalculateResult(expenses);
+			var result = recalculateResult(bill);
 			var joe = result["Joe"];
 			expect(joe.name).toBe("Joe");
 			expect(joe.totalPaid).toBe(10);
@@ -61,14 +61,14 @@ describe('finance', function () {
 
 
 		it("divides due in two with equal shares", function () {
-			var expenses = [
-				{ name: "Joe", amount: 10, 
+			var bill = {expenses: [
+				{ name: "Joe", amount: 10,
 					sharingModel: { equalShares: true, shares: {}}},
 				{ name: "Sara", amount: 0,
 					sharingModel: { equalShares: true, shares: {}}}
-			];
+			]};
 
-			var result = recalculateResult(expenses);
+			var result = recalculateResult(bill);
 			var joe = result["Joe"];
 			expect(joe.name).toBe("Joe");
 			expect(joe.totalPaid).toBe(10);
@@ -82,14 +82,14 @@ describe('finance', function () {
 
 
 		it("divides due accordingly with unequal shares", function () {
-			var expenses = [
-				{ name: "Joe", amount: 30, 
+			var bill = {expenses: [
+				{ name: "Joe", amount: 30,
 					sharingModel: { equalShares: false, shares: {Joe: 1, Sara: 2}}},
 				{ name: "Sara", amount: 0,
 					sharingModel: { equalShares: true, shares: {}}}
-			];
+			]};
 
-			var result = recalculateResult(expenses);
+			var result = recalculateResult(bill);
 			var joe = result["Joe"];
 			expect(joe.name).toBe("Joe");
 			expect(joe.totalPaid).toBe(30);
