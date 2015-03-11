@@ -1,10 +1,10 @@
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
-var storage = require('./server/storage.js');
+var storage = require('./storage.js');
 
 var PORT = process.env.PORT || 3000;
-var SERVER_ROOT = __dirname;
+var SERVER_ROOT = path.resolve(__dirname, '..');
 
 var app = express();
 
