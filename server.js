@@ -25,7 +25,7 @@ app.put('/api/v1/bills/*', function (req, res) {
 	});
 });
 
-app.use('/js', express.static(__dirname + '/js'));
+app.use('/client', express.static(__dirname + '/client'));
 app.use('/lib', express.static(__dirname + '/lib'));
 
 app.get('/*', function (req, res) {
