@@ -1,15 +1,17 @@
-var PORT = process.env.PORT || 3000;
-
+var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var storage = require('./server/storage.js');
+
+var PORT = process.env.PORT || 3000;
+var SERVER_ROOT = __dirname;
 
 var app = express();
 
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-	res.sendFile(__dirname + '/client/index.html');
+	res.sendFile(path.resolve(SERVER_ROOT, 'client/index.html'));
 });
 
 app.get('/api/v1/bills/*', function (req, res) {
@@ -25,12 +27,12 @@ app.put('/api/v1/bills/*', function (req, res) {
 	});
 });
 
-app.use('/client', express.static(__dirname + '/client'));
-app.use('/lib', express.static(__dirname + '/lib'));
+app.use('/client', express.static(path.resolve(SERVER_ROOT, 'client')));
+app.use('/lib', express.static(path.resolve(SERVER_ROOT, 'lib')));
 
 app.get('/*', function (req, res) {
 	var url = req.params[0];
-	res.sendFile(__dirname + '/client/bill.html');
+	res.sendFile(path.resolve(SERVER_ROOT, 'client/bill.html'));
 });
 
 app.listen(PORT);
