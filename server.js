@@ -2,7 +2,7 @@ var PORT = process.env.PORT || 3000;
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var storage = require('./storage.js');
+var storage = require('./server/storage.js');
 
 var app = express();
 
