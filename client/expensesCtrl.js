@@ -1,20 +1,29 @@
-var vacationExpensesApp = angular.module('vacationExpensesApp', ['finance']);
+var vacationExpensesApp = angular.module('vacationExpensesApp', [
+	'finance',
+	'vacationExpenses.dataStore'
+]);
 
 vacationExpensesApp.config(['$locationProvider', function ($locationProvider) {
 	$locationProvider.html5Mode(true);
 }]);
 
 
-vacationExpensesApp.controller('ExpensesCtrl', ['$scope', '$location', '$http', 'recalculateResult', function ($scope, $location, $http, recalculateResult) {
+vacationExpensesApp.controller('ExpensesCtrl', [
+	'$scope',
+	'$location',
+	'$http',
+	'recalculateResult',
+	'dataStore', function ($scope, $location, $http, recalculateResult, dataStore) {
 	$scope.url = $location.path().split('/', 2)[1];
-	$http.get('/api/v1/bills/' + $scope.url)
-		.success(function (data, status, headers, config) {
+
+	dataStore.fetch($scope.url)
+		.success(function (data, status) {
 			if (status == 200) {
 				$scope.bill = data.bill;
 				$scope.billLoaded = true;
 			}
 		})
-		.error(function (data, status, headers, config) {
+		.error(function (status) {
 			$scope.error = { status: status };
 		});
 
