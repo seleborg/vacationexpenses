@@ -3,7 +3,7 @@ describe('vacationExpenses.dataStore', function () {
 		module('vacationExpenses.dataStore')
 	});
 
-	describe("dataStore", function () {
+	describe('dataStore', function () {
 		var $httpBackend;
 		var dataStore;
 
@@ -19,8 +19,8 @@ describe('vacationExpenses.dataStore', function () {
             $httpBackend.verifyNoOutstandingRequest();
         });
 
-		describe("fetch", function () {
-			it("calls the correct API URL", function () {
+		describe('fetch', function () {
+			it('calls the correct API URL', function () {
 				$httpBackend.expectGET('/api/v1/bills/20449572').respond(200, {});
 				$httpBackend.expectGET('/api/v1/bills/abcdefgh').respond(200, {});
 				dataStore.fetch('20449572');
@@ -29,14 +29,14 @@ describe('vacationExpenses.dataStore', function () {
 			});
 
 
-			it("returns a promise with success() and error()", function () {
+			it('returns a promise with success() and error()', function () {
 				$httpBackend.expectGET('/api/v1/bills/myBill').respond(200, {});
 				dataStore.fetch('myBill').success(function () {}).error(function () {});
 				$httpBackend.flush();
 			});
 
 
-			it("ends up calling success() upon success", function () {
+			it('ends up calling success() upon success', function () {
 				var successCalled = false;
 				var errorCalled = false;
 
@@ -51,7 +51,7 @@ describe('vacationExpenses.dataStore', function () {
 			});
 
 
-			it("ends up calling error() upon error", function () {
+			it('ends up calling error() upon error', function () {
 				var successCalled = false;
 				var errorCalled = false;
 
