@@ -67,6 +67,31 @@ describe('vacationExpenses.dataStore', function () {
 				expect(successCalled).toBe(false);
 				expect(errorCalled).toBe(true);
 			});
+
+
+			it('can register several success() and error() callbacks', function () {
+				var successCalled = false;
+				var successCalledAgain = false;
+				var errorCalled = false;
+				var errorCalledAgain = false;
+
+				$httpBackend.expectGET('/api/v1/bills/myBill').respond(200, {});
+				var promise = dataStore.fetch('myBill');
+				promise.success(function () { successCalled = true; });
+				promise.success(function () { successCalledAgain = true; });
+
+				$httpBackend.expectGET('/api/v1/bills/myBill').respond(404, {});
+				promise = dataStore.fetch('myBill');
+				promise.error(function () { errorCalled = true; });
+				promise.error(function () { errorCalledAgain = true; });
+
+				$httpBackend.flush();
+
+				expect(successCalled).toBeTruthy();
+				expect(successCalledAgain).toBeTruthy();
+				expect(errorCalledAgain).toBeTruthy();
+				expect(errorCalled).toBeTruthy();
+			});
 		});
 	});
 });
