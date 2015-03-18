@@ -47,10 +47,6 @@ Loading bill...
 		</li>
 	</ul>
 
-	<div ng-show="isSaving">
-		<span>Saving...</span>
-	</div>
-
 	<h2>Totals</h2>
 	<table>
 		<tr><th>Person</th><th>Total paid</th><th>Total due</th><th>Balance</th></tr>
@@ -67,7 +63,7 @@ Loading bill...
 		<h1>Not found</h1>
 	</div>
 	<div ng-show="error.status != 404">
-		<h1>Error</h1>
+		<h1>Error {{error.status}}</h1>
 	</div>
 </div>
 </body>

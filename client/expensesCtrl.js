@@ -33,21 +33,18 @@ vacationExpensesApp.controller('ExpensesCtrl', [
 	$scope.bill = null;
 	$scope.result = null;
 
-	$scope.isSaving = false;
-
 	$scope.$watch('bill', function (bill) {
 		if (bill) {
 			$scope.result = recalculateResult(bill);
-
-			$scope.isSaving = true;
 
 			var data = {
 				version: 1,
 				bill: $scope.bill
 			};
-			$http.put('/api/v1/bills/' + $scope.url, data)
-				.success(function () { $scope.isSaving = false; })
-				.error(function () { $scope.isSaving = false; });
+			dataStore.storeDelayed($scope.url, data)
+				.error(function (status) {
+					$scope.error = { status: status };
+				});
 		}
 	}, true);
 
