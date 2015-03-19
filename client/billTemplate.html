@@ -8,6 +8,7 @@
 	<script src="client/app.js"></script>
 	<script src="client/billService.js"></script>
 	<script src="client/billController.js"></script>
+	<script src="client/expenseController.js"></script>
 	<script src="client/finance.js"></script>
 	<script src="client/dataStoreService.js"></script>
 </head>
@@ -22,7 +23,7 @@ Loading bill...
 <div ng-show="billLoaded">
 	<h2>Who paid what?</h2>
 	<ul>
-		<li ng-repeat="expense in bill.expenses">
+		<li ng-repeat="expense in bill.expenses track by $index" ng-controller="expenseController">
 			<div>
 				<input type="text" ng-model="expense.name">
 				<input type="text" ng-model="expense.amount">

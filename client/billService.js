@@ -49,6 +49,27 @@ angular.module('vacationExpenses.billService', ['finance'])
 			};
 
 
+			billObject.updateExpense = function (index, newExpense) {
+				var oldExpense = this.expenses[index];
+
+				this.expenses[index] = newExpense;
+				this.names = allNames(this.expenses);
+
+				angular.forEach(this.expenses, function (expense) {
+					var newShares = {};
+					angular.forEach(billObject.names, function (name) {
+						if (expense.sharingModel.shares.hasOwnProperty(name)) {
+							newShares[name] = expense.sharingModel.shares[name];
+						}
+						else {
+							newShares[name] = 1;
+						}
+					});
+					expense.sharingModel.shares = newShares;
+				});
+			}
+
+
 			billObject.recalculateResult = function () {
 				return recalculateResult(billObject);
 			};

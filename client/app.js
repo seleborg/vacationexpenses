@@ -1,1 +1,3 @@
-angular.module('vacationExpenses.app', ['vacationExpenses.billController']);
+angular.module('vacationExpenses.app', [
+	'vacationExpenses.billController',
+	'vacationExpenses.expenseController']);
