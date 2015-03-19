@@ -8,6 +8,21 @@ angular.module('vacationExpenses.billService', ['finance'])
 			};
 
 
+			billObject.addExpense = function (name, amount, purpose) {
+				var sharingModel = {
+					equalShares: true,
+					shares: {}
+				};
+
+				billObject.expenses.push({
+					name: name,
+					amount: amount,
+					purpose: purpose,
+					sharingModel: sharingModel,
+				});
+			};
+
+
 			billObject.recalculateResult = function () {
 				return recalculateResult(billObject);
 			};

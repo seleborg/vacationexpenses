@@ -51,16 +51,19 @@ angular.module('vacationExpenses.billController', [
 
 
 		var EMPTY_EXPENSE = {
-			name: "",
-			amount: "",
-			purpose: "",
-			sharingModel: { equalShares: true, shares: {} }
+			name: '',
+			amount: '',
+			purpose: ''
 		};
 
 		$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 
 		$scope.addExpense = function () {
-			$scope.bill.expenses.push($scope.newExpense);
+			$scope.bill.addExpense(
+				$scope.newExpense.name,
+				$scope.newExpense.amount,
+				$scope.newExpense.purpose);
+
 			$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 		};
 
