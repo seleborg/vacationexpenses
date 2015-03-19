@@ -1,14 +1,16 @@
-var vacationExpensesApp = angular.module('vacationExpensesApp', [
+angular.module('vacationExpenses.app', ['vacationExpenses.billController']);
+
+var billControllerModule = angular.module('vacationExpenses.billController', [
 	'finance',
 	'vacationExpenses.dataStore'
 ]);
 
-vacationExpensesApp.config(['$locationProvider', function ($locationProvider) {
+billControllerModule.config(['$locationProvider', function ($locationProvider) {
 	$locationProvider.html5Mode(true);
 }]);
 
 
-vacationExpensesApp.controller('ExpensesCtrl', [
+billControllerModule.controller('billController', [
 	'$scope',
 	'$location',
 	'$http',
