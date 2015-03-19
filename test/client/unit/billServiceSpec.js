@@ -38,6 +38,21 @@ describe('vacationExpenses.billService', function () {
 
 				expect(bill.expenses[0].sharingModel.equalShares).toBeTruthy();
 			});
+
+
+			it('updates sharingModels when a new name is introduced', function () {
+				var bill = billService.createBill({expenses: []});
+
+				bill.addExpense('John', 10, 'Food');
+				expect(bill.expenses[0].sharingModel.shares.John).toBe(1);
+				expect(bill.expenses[0].sharingModel.shares.Bob).not.toBeDefined();
+
+				bill.addExpense('Bob', 20, 'Shoes');
+				angular.forEach(bill.expenses, function (expense) {
+					expect(expense.sharingModel.shares.John).toBe(1);
+					expect(expense.sharingModel.shares.Bob).toBe(1);
+				});
+			});
 		});
 	});
 });
