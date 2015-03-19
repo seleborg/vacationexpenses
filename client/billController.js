@@ -1,5 +1,3 @@
-angular.module('vacationExpenses.app', ['vacationExpenses.billController']);
-
 var billControllerModule = angular.module('vacationExpenses.billController', [
 	'finance',
 	'vacationExpenses.dataStore'
