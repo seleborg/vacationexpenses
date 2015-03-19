@@ -1,4 +1,4 @@
-angular.module('vacationExpenses.dataStore', [])
+angular.module('vacationExpenses.dataStoreService', [])
 	.factory('dataStore', ['$http', '$timeout', '$q', function ($http, $timeout, $q) {
 		var delayInMillis = 1000;
 		var dataToStore;

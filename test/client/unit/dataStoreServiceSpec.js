@@ -1,6 +1,6 @@
-describe('vacationExpenses.dataStore', function () {
+describe('vacationExpenses.dataStoreService', function () {
 	beforeEach(function () {
-		module('vacationExpenses.dataStore')
+		module('vacationExpenses.dataStoreService')
 	});
 
 	describe('dataStore', function () {

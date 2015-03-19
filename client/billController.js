@@ -1,6 +1,6 @@
 angular.module('vacationExpenses.billController', [
 		'finance',
-		'vacationExpenses.dataStore'
+		'vacationExpenses.dataStoreService'
 	])
 
 
