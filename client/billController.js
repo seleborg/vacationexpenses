@@ -1,5 +1,5 @@
 angular.module('vacationExpenses.billController', [
-		'finance',
+		'vacationExpenses.billService',
 		'vacationExpenses.dataStoreService'
 	])
 
@@ -13,14 +13,14 @@ angular.module('vacationExpenses.billController', [
 		'$scope',
 		'$location',
 		'$http',
-		'recalculateResult',
-		'dataStore', function ($scope, $location, $http, recalculateResult, dataStore) {
+		'billService',
+		'dataStore', function ($scope, $location, $http, billService, dataStore) {
 		$scope.url = $location.path().split('/', 2)[1];
 
 		dataStore.fetch($scope.url)
 			.success(function (data, status) {
 				if (status == 200) {
-					$scope.bill = data.bill;
+					$scope.bill = billService.createBill(data.bill);
 					$scope.billLoaded = true;
 				}
 			})
@@ -36,7 +36,7 @@ angular.module('vacationExpenses.billController', [
 
 		$scope.$watch('bill', function (bill) {
 			if (bill) {
-				$scope.result = recalculateResult(bill);
+				$scope.result = bill.recalculateResult();
 
 				var data = {
 					version: 1,
