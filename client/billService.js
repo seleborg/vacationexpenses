@@ -34,6 +34,7 @@ angular.module('vacationExpenses.billService', [])
 		billService.createBill = function (billData) {
 			var billObject = {
 				expenses: angular.copy(billData.expenses),
+				currencies: angular.copy(billData.currencies),
 				names: allNames(billData.expenses),
 				updatedCallbacks: [],
 			};
