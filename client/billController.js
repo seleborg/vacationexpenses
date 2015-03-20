@@ -21,6 +21,7 @@ angular.module('vacationExpenses.billController', [
 			.success(function (data, status) {
 				if (status == 200) {
 					$scope.bill = billService.createBill(data.bill);
+					$scope.bill.onUpdated($scope.onBillUpdated);
 					$scope.billLoaded = true;
 				}
 			})
@@ -34,21 +35,18 @@ angular.module('vacationExpenses.billController', [
 		$scope.bill = null;
 		$scope.result = null;
 
-		$scope.$watch('bill', function (bill) {
-			if (bill) {
-				$scope.result = bill.recalculateResult();
+		$scope.onBillUpdated = function () {
+			$scope.result = $scope.bill.calculateResult();
 
-				var data = {
-					version: 1,
-					bill: $scope.bill
-				};
-				dataStore.storeDelayed($scope.url, data)
-					.error(function (status) {
-						$scope.error = { status: status };
-					});
-			}
-		}, true);
-
+			var data = {
+				version: 1,
+				bill: $scope.bill
+			};
+			dataStore.storeDelayed($scope.url, data)
+				.error(function (status) {
+					$scope.error = { status: status };
+				});
+		};
 
 		var EMPTY_EXPENSE = {
 			name: '',
@@ -68,6 +66,6 @@ angular.module('vacationExpenses.billController', [
 		};
 
 		$scope.deleteExpense = function (index) {
-			$scope.bill.expenses.splice(index, 1);
+			$scope.bill.deleteExpense(index);
 		};
 	}]);

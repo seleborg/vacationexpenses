@@ -53,6 +53,18 @@ describe('vacationExpenses.billService', function () {
 					expect(expense.sharingModel.shares.Bob).toBe(1);
 				});
 			});
+
+
+			it('fires the onUpdated callback', function () {
+				var bill = billService.createBill({expenses: []});
+
+				var callbackFired = false;
+				bill.onUpdated(function () {
+					callbackFired = true;
+				});
+				bill.addExpense('Bob', 20, 'Shoes');
+				expect(callbackFired).toBeTruthy();
+			});
 		});
 
 
@@ -100,6 +112,130 @@ describe('vacationExpenses.billService', function () {
 					expect(expense.sharingModel.shares.Bob).toBe(4);
 					expect(expense.sharingModel.shares.Bill).toBe(1);
 				});
+			});
+
+
+			it('fires the onUpdated callback', function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1}}}
+					]
+				});
+
+				var callbackCalled = false;
+				bill.onUpdated(function () {
+					callbackCalled = true;
+				});
+
+				bill.updateExpense(0, {name: 'Bill', amount: 20, purpose: 'Food',
+							sharingModel: {equalShares: true, shares: {Joe: 1}}});
+
+				expect(callbackCalled).toBeTruthy();
+			});
+		});
+
+
+		describe('calculateResult', function () {
+			it("works with only one expense", function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1}}}
+					]
+				});
+
+				var result = bill.calculateResult(bill);
+				expect(result.Joe.name).toBe('Joe');
+				expect(result.Joe.totalPaid).toBe(10);
+				expect(result.Joe.totalDue).toBe(10);
+			});
+
+
+			it("divides due in two with equal shares", function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
+						{name: 'Bob', amount: 20, purpose: 'Food',
+							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
+					]
+				});
+
+				var result = bill.calculateResult(bill);
+				expect(result.Joe.totalPaid).toBe(10);
+				expect(result.Joe.totalDue).toBe(15);
+				expect(result.Bob.totalPaid).toBe(20);
+				expect(result.Bob.totalDue).toBe(15);
+			});
+
+
+			it("divides due accordingly with unequal shares", function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 30, purpose: 'Shopping',
+							sharingModel: {equalShares: false, shares: {Joe: 1, Bob: 2}}},
+						{name: 'Bob', amount: 0, purpose: 'Food',
+							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 1}}},
+					]
+				});
+
+				var result = bill.calculateResult(bill);
+				expect(result.Joe.totalPaid).toBe(30);
+				expect(result.Joe.totalDue).toBe(10);
+				expect(result.Bob.totalPaid).toBe(0);
+				expect(result.Bob.totalDue).toBe(20);
+			});
+		});
+
+
+		describe('deleteExpense', function () {
+			it('removes the expense', function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
+						{name: 'Bob', amount: 20, purpose: 'Food',
+							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
+					]
+				});
+
+				bill.deleteExpense(0);
+				expect(bill.expenses[0].name).toBe('Bob');
+			});
+
+
+			it('keeps shares in sync', function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
+						{name: 'Bob', amount: 20, purpose: 'Food',
+							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
+					]
+				});
+
+				bill.deleteExpense(0);
+				expect(bill.expenses[0].sharingModel.shares.Joe).not.toBeDefined();
+				expect(bill.expenses[0].sharingModel.shares.Bob).toBeDefined();
+			});
+
+
+			it('fires the onUpdated callback', function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1}}}
+					]
+				});
+
+				var callbackCalled = false;
+				bill.onUpdated(function () {
+					callbackCalled = true;
+				});
+
+				bill.deleteExpense(0);
+				expect(callbackCalled).toBeTruthy();
 			});
 		});
 	});

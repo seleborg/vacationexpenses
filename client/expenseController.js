@@ -1,6 +1,5 @@
 angular.module('vacationExpenses.expenseController', [])
 	.controller('expenseController', ['$scope', function ($scope) {
-		$scope.sourceExpense = $scope.expense;
 		$scope.expense = angular.copy($scope.expense);
 
 		$scope.$watch('expense', function (expense) {

@@ -1,5 +1,5 @@
-angular.module('vacationExpenses.billService', ['finance'])
-	.service('billService', ['recalculateResult', function (recalculateResult) {
+angular.module('vacationExpenses.billService', [])
+	.service('billService', [function () {
 		function allNames(expenses) {
 			var names = [];
 			angular.forEach(expenses, function (expense) {
@@ -11,48 +11,47 @@ angular.module('vacationExpenses.billService', ['finance'])
 		}
 
 
+		function sumShares(expense) {
+			var sum = 0;
+			angular.forEach(expense.sharingModel.shares, function (share, _) {
+				sum += expense.sharingModel.equalShares ? 1 : Number(share);
+			});
+			return sum;
+		}
+
+
+		function sum(array) {
+			var sum = 0;
+			angular.forEach(array, function(value) {
+				sum += Number(value);
+			});
+			return sum;
+		}
+
+
 		var billService = {};
 
 		billService.createBill = function (billData) {
 			var billObject = {
 				expenses: angular.copy(billData.expenses),
-				names: allNames(billData.expenses)
+				names: allNames(billData.expenses),
+				updatedCallbacks: [],
 			};
 
 
-			billObject.addExpense = function (name, amount, purpose) {
-				var sharingModel = {
-					equalShares: true,
-					shares: {}
-				};
+			billObject.onUpdated = function (callback) {
+				this.updatedCallbacks.push(callback);
+			};
 
-				if (this.names.indexOf(name) == -1) {
-					this.names.push(name);
-				}
 
-				angular.forEach(this.names, function (name) {
-					sharingModel.shares[name] = 1;
-				});
-
-				angular.forEach(this.expenses, function (expense) {
-					if (!expense.sharingModel.shares.hasOwnProperty(name)) {
-						expense.sharingModel.shares[name] = 1;
-					}
-				});
-
-				this.expenses.push({
-					name: name,
-					amount: amount,
-					purpose: purpose,
-					sharingModel: sharingModel,
+			billObject._triggerOnUpdated = function () {
+				angular.forEach(this.updatedCallbacks, function (callback) {
+					callback(billObject);
 				});
 			};
 
 
-			billObject.updateExpense = function (index, newExpense) {
-				var oldExpense = this.expenses[index];
-
-				this.expenses[index] = newExpense;
+			billObject._fixShares = function () {
 				this.names = allNames(this.expenses);
 
 				angular.forEach(this.expenses, function (expense) {
@@ -67,11 +66,71 @@ angular.module('vacationExpenses.billService', ['finance'])
 					});
 					expense.sharingModel.shares = newShares;
 				});
+			};
+
+
+			billObject.addExpense = function (name, amount, purpose) {
+				this.expenses.push({
+					name: name,
+					amount: amount,
+					purpose: purpose,
+					sharingModel: {equalShares: true, shares: {}},
+				});
+				this._fixShares();
+				this._triggerOnUpdated();
+			};
+
+
+			billObject.updateExpense = function (index, newExpense) {
+				this.expenses[index] = newExpense;
+				this._fixShares();
+				this._triggerOnUpdated();
 			}
 
 
-			billObject.recalculateResult = function () {
-				return recalculateResult(billObject);
+			billObject.deleteExpense = function (index) {
+				this.expenses.splice(index, 1);
+				this._fixShares();
+				this._triggerOnUpdated();
+			};
+
+
+			billObject.calculateResult = function () {
+				var result = {};
+
+				angular.forEach(this.names, function (name) {
+					result[name] = {
+						name: name,
+						paid: [],
+						due: [],
+						totalPaid: 0,
+						totalDue: 0
+					};
+				});
+
+				angular.forEach(this.expenses, function(expense) {
+					result[expense.name].paid.push(Number(expense.amount));
+
+					var amount = Number(expense.amount);
+					var shares = sumShares(expense);
+
+					angular.forEach(expense.sharingModel.shares, function(share, name) {
+						if (shares == 0) {
+							var due = 0;
+						}
+						else {
+							var due = amount * (expense.sharingModel.equalShares ? 1 : Number(share)) / shares;
+						}
+						result[name].due.push(due);
+					});
+				});
+
+				angular.forEach(result, function (person, name) {
+					person.totalPaid = sum(person.paid);
+					person.totalDue = sum(person.due);
+				});
+
+				return result;
 			};
 
 
