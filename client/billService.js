@@ -35,29 +35,29 @@ angular.module('vacationExpenses.billService', [])
 			var billObject = {
 				expenses: angular.copy(billData.expenses),
 				currencies: angular.copy(billData.currencies),
-				names: allNames(billData.expenses),
-				updatedCallbacks: [],
+				_names: allNames(billData.expenses),
+				_updatedCallbacks: [],
 			};
 
 
 			billObject.onUpdated = function (callback) {
-				this.updatedCallbacks.push(callback);
+				this._updatedCallbacks.push(callback);
 			};
 
 
 			billObject._triggerOnUpdated = function () {
-				angular.forEach(this.updatedCallbacks, function (callback) {
+				angular.forEach(this._updatedCallbacks, function (callback) {
 					callback(billObject);
 				});
 			};
 
 
 			billObject._fixShares = function () {
-				this.names = allNames(this.expenses);
+				this._names = allNames(this.expenses);
 
 				angular.forEach(this.expenses, function (expense) {
 					var newShares = {};
-					angular.forEach(billObject.names, function (name) {
+					angular.forEach(billObject._names, function (name) {
 						if (expense.sharingModel.shares.hasOwnProperty(name)) {
 							newShares[name] = expense.sharingModel.shares[name];
 						}
@@ -99,7 +99,7 @@ angular.module('vacationExpenses.billService', [])
 			billObject.calculateResult = function () {
 				var result = {};
 
-				angular.forEach(this.names, function (name) {
+				angular.forEach(this._names, function (name) {
 					result[name] = {
 						name: name,
 						paid: [],
