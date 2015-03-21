@@ -17,6 +17,7 @@ describe('vacationExpenses.billService', function () {
 				var bill = billService.createBill(billData);
 
 				expect(bill.expenses[0].name).toBe('Joe');
+				expect(bill.names).toEqual(['Joe']);
 			});
 		});
 
@@ -30,6 +31,19 @@ describe('vacationExpenses.billService', function () {
 				expect(bill.expenses[0].amount).toBe(10);
 				expect(bill.expenses[0].currency).toBe('EUR');
 				expect(bill.expenses[0].purpose).toBe('Food');
+			});
+
+
+			it('updates the names property', function () {
+				var bill = billService.createBill({expenses: []});
+				expect(bill.names).toEqual([]);
+
+				bill.addExpense('John', 10, 'EUR', 'Food');
+				expect(bill.names).toEqual(['John']);
+
+				bill.addExpense('Bill', 20, 'EUR', 'Drinks');
+				expect(bill.names).toContain('Bill');
+				expect(bill.names).toContain('John');
 			});
 
 
@@ -83,6 +97,16 @@ describe('vacationExpenses.billService', function () {
 				expect(bill.expenses[0].name).toBe('Bill');
 				expect(bill.expenses[0].amount).toBe(20);
 				expect(bill.expenses[0].purpose).toBe('Food');
+			});
+
+
+			it('updates the names property', function () {
+				var bill = billService.createBill({expenses: []});
+				bill.addExpense('John', 10, 'EUR', 'Food');
+				expect(bill.names).toEqual(['John']);
+
+				bill.updateExpense('Joe', 10, 'EUR', 'Food');
+				expect(bill.names).toEqual(['John']);
 			});
 
 
@@ -150,6 +174,16 @@ describe('vacationExpenses.billService', function () {
 
 				bill.deleteExpense(0);
 				expect(bill.expenses[0].name).toBe('Bob');
+			});
+
+
+			it('updates the names property', function () {
+				var bill = billService.createBill({expenses: []});
+				bill.addExpense('John', 10, 'EUR', 'Food');
+				expect(bill.names).toEqual(['John']);
+
+				bill.deleteExpense(0);
+				expect(bill.names).toEqual([]);
 			});
 
 
