@@ -55,6 +55,7 @@ angular.module('vacationExpenses.billController', [
 		var EMPTY_EXPENSE = {
 			name: '',
 			amount: '',
+			currency: '',
 			purpose: ''
 		};
 
@@ -64,6 +65,7 @@ angular.module('vacationExpenses.billController', [
 			$scope.bill.addExpense(
 				$scope.newExpense.name,
 				$scope.newExpense.amount,
+				$scope.newExpense.currency,
 				$scope.newExpense.purpose);
 
 			$scope.newExpense = angular.copy(EMPTY_EXPENSE);

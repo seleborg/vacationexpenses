@@ -70,10 +70,11 @@ angular.module('vacationExpenses.billService', [])
 			};
 
 
-			billObject.addExpense = function (name, amount, purpose) {
+			billObject.addExpense = function (name, amount, currency, purpose) {
 				this.expenses.push({
 					name: name,
 					amount: amount,
+					currency: currency,
 					purpose: purpose,
 					sharingModel: {equalShares: true, shares: {}},
 				});
