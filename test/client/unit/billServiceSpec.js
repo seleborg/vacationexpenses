@@ -222,6 +222,50 @@ describe('vacationExpenses.billService', function () {
 		});
 
 
+		describe('calculateDue', function () {
+			var bill;
+
+			beforeEach(function () {
+				bill = billService.createBill({expenses: []});
+				bill.currencies = [
+					{code: 'USD', inEUR: 0.5},
+					{code: 'EUR', inEUR: 1},
+					{code: 'GBP', inEUR: 2},
+				];
+			});
+
+
+			it('works in simple cases', function () {
+				bill.addExpense('John', 10, 'EUR', 'Food');
+				bill.addExpense('Laura', 20, 'EUR', 'Bus');
+
+				expect(bill.calculateDue('John', 'EUR')).toBe(15);
+				expect(bill.calculateDue('Laura', 'EUR')).toBe(15);
+			});
+
+
+			it('works with unequal shares', function () {
+				bill.addExpense('John', 10, 'EUR', 'Food');
+
+				bill.expenses[0].sharingModel.equalShares = false;
+				bill.expenses[0].sharingModel.shares.John = 3;
+				bill.expenses[0].sharingModel.shares.Laura = 1;
+
+				expect(bill.calculateDue('John', 'EUR')).toBe(7.50);
+				expect(bill.calculateDue('Laura', 'EUR')).toBe(2.50);
+			});
+
+
+			it('works with different currencies', function () {
+				bill.addExpense('John', 12, 'USD', 'Food');
+
+				expect(bill.calculateDue('John', 'USD')).toBe(12);
+				expect(bill.calculateDue('John', 'EUR')).toBe(6);
+				expect(bill.calculateDue('John', 'GBP')).toBe(3);
+			});
+		});
+
+
 		describe('calculateResult', function () {
 			it("works with only one expense", function () {
 				var bill = billService.createBill({
@@ -234,7 +278,6 @@ describe('vacationExpenses.billService', function () {
 				var result = bill.calculateResult(bill);
 				expect(result.Joe.name).toBe('Joe');
 				expect(result.Joe.totalPaid).toBe(10);
-				expect(result.Joe.totalDue).toBe(10);
 			});
 
 
@@ -250,9 +293,7 @@ describe('vacationExpenses.billService', function () {
 
 				var result = bill.calculateResult(bill);
 				expect(result.Joe.totalPaid).toBe(10);
-				expect(result.Joe.totalDue).toBe(15);
 				expect(result.Bob.totalPaid).toBe(20);
-				expect(result.Bob.totalDue).toBe(15);
 			});
 
 
@@ -268,9 +309,7 @@ describe('vacationExpenses.billService', function () {
 
 				var result = bill.calculateResult(bill);
 				expect(result.Joe.totalPaid).toBe(30);
-				expect(result.Joe.totalDue).toBe(10);
 				expect(result.Bob.totalPaid).toBe(0);
-				expect(result.Bob.totalDue).toBe(20);
 			});
 		});
 	});

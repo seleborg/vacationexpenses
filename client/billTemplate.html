@@ -59,7 +59,7 @@ Loading bill...
 		<tr ng-repeat="person in result">
 			<td><span>{{person.name}}</span></td>
 			<td><span>{{person.totalPaid | currency}}</span></td>
-			<td><span>{{person.totalDue | currency}}</span></td>
+			<td><span>{{bill.calculateDue(person.name, 'USD') | currency}}</span></td>
 			<td><span>{{person.totalPaid - person.totalDue | currency}}</span></td>
 		</tr>
 	</table>

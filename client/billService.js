@@ -97,6 +97,51 @@ angular.module('vacationExpenses.billService', [])
 			};
 
 
+			billObject.calculateDue = function (name, targetCurrencyCode) {
+				var totalDue = 0;
+
+				var targetCurrency = this._getCurrency(targetCurrencyCode);
+
+				angular.forEach(this.expenses, function (expense) {
+					var amount = Number(expense.amount);
+					var currency = expense.currency;
+					var totalShares = sumShares(expense);
+
+					if (totalShares == 0) {
+						var due = 0;
+					}
+					else {
+						var effectiveShares =
+							expense.sharingModel.equalShares
+							? 1
+							: Number(expense.sharingModel.shares[name]);
+
+						var sourceCurrency = billObject._getCurrency(expense.currency);
+
+						var exchangeRate =
+							sourceCurrency.inEUR / targetCurrency.inEUR;
+
+						var due = amount * exchangeRate * (effectiveShares / totalShares);
+					}
+
+					totalDue += due;
+				});
+
+				return totalDue;
+			}
+
+
+			billObject._getCurrency = function (code) {
+				for (var i = 0; i < this.currencies.length; ++i) {
+					if (this.currencies[i].code == code) {
+						return this.currencies[i];
+					}
+				}
+
+				throw('Currency ' + code + ' not found.');
+			};
+
+
 			billObject.calculateResult = function () {
 				var result = {};
 
@@ -104,32 +149,16 @@ angular.module('vacationExpenses.billService', [])
 					result[name] = {
 						name: name,
 						paid: [],
-						due: [],
 						totalPaid: 0,
-						totalDue: 0
 					};
 				});
 
 				angular.forEach(this.expenses, function(expense) {
 					result[expense.name].paid.push(Number(expense.amount));
-
-					var amount = Number(expense.amount);
-					var shares = sumShares(expense);
-
-					angular.forEach(expense.sharingModel.shares, function(share, name) {
-						if (shares == 0) {
-							var due = 0;
-						}
-						else {
-							var due = amount * (expense.sharingModel.equalShares ? 1 : Number(share)) / shares;
-						}
-						result[name].due.push(due);
-					});
 				});
 
 				angular.forEach(result, function (person, name) {
 					person.totalPaid = sum(person.paid);
-					person.totalDue = sum(person.due);
 				});
 
 				return result;
