@@ -26,6 +26,8 @@ Loading bill...
 			<div>
 				<input type="text" ng-model="expense.name">
 				<input type="text" ng-model="expense.amount">
+				<select ng-options="cur.code as cur.code for cur in bill.currencies"
+					    ng-model="expense.currency"></select>
 				<input type="text" ng-model="expense.purpose">
 				<input type="checkbox" ng-model="expense.sharingModel.equalShares">Equal shares</input>
 				<a ng-click="deleteExpense($index)" href="#">Remove</a>
