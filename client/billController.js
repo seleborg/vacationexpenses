@@ -48,6 +48,10 @@ angular.module('vacationExpenses.billController', [
 				});
 		};
 
+		$scope.deleteExpense = function (index) {
+			$scope.bill.deleteExpense(index);
+		};
+
 		var EMPTY_EXPENSE = {
 			name: '',
 			amount: '',
@@ -63,9 +67,5 @@ angular.module('vacationExpenses.billController', [
 				$scope.newExpense.purpose);
 
 			$scope.newExpense = angular.copy(EMPTY_EXPENSE);
-		};
-
-		$scope.deleteExpense = function (index) {
-			$scope.bill.deleteExpense(index);
 		};
 	}]);
