@@ -33,11 +33,8 @@ angular.module('vacationExpenses.billController', [
 		$scope.billLoaded = false;
 		$scope.error = null;
 		$scope.bill = null;
-		$scope.result = null;
 
 		$scope.onBillUpdated = function () {
-			$scope.result = $scope.bill.calculateResult();
-
 			var data = {
 				version: 1,
 				bill: $scope.bill
@@ -70,4 +67,15 @@ angular.module('vacationExpenses.billController', [
 
 			$scope.newExpense = angular.copy(EMPTY_EXPENSE);
 		};
+	}])
+
+
+	.controller('resultController', ['$scope', function ($scope) {
+		$scope.onBillUpdated = function () {
+			$scope.totalDue = $scope.bill.calculateDue($scope.name, 'USD');
+			$scope.totalPaid = $scope.bill.calculatePaid($scope.name, 'USD');
+			$scope.balance = $scope.totalPaid - $scope.totalDue;
+		};
+		$scope.bill.onUpdated($scope.onBillUpdated);
+		$scope.onBillUpdated();
 	}]);

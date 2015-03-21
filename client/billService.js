@@ -100,8 +100,6 @@ angular.module('vacationExpenses.billService', [])
 			billObject.calculateDue = function (name, targetCurrencyCode) {
 				var totalDue = 0;
 
-				var targetCurrency = this._getCurrency(targetCurrencyCode);
-
 				angular.forEach(this.expenses, function (expense) {
 					var amount = Number(expense.amount);
 					var currency = expense.currency;
@@ -116,19 +114,46 @@ angular.module('vacationExpenses.billService', [])
 							? 1
 							: Number(expense.sharingModel.shares[name]);
 
-						var sourceCurrency = billObject._getCurrency(expense.currency);
-
-						var exchangeRate =
-							sourceCurrency.inEUR / targetCurrency.inEUR;
-
-						var due = amount * exchangeRate * (effectiveShares / totalShares);
+						var due = billObject._convertCurrency(
+									amount,
+									expense.currency,
+									targetCurrencyCode)
+							* (effectiveShares / totalShares);
 					}
 
 					totalDue += due;
 				});
 
 				return totalDue;
-			}
+			};
+
+
+			billObject.calculatePaid = function (name, targetCurrencyCode) {
+				var totalPaid = 0;
+
+				angular.forEach(this.expenses, function (expense) {
+					if (expense.name == name) {
+						totalPaid += billObject._convertCurrency(
+							expense.amount,
+							expense.currency,
+							targetCurrencyCode);
+					}
+				});
+
+				return totalPaid;
+			};
+
+
+			billObject._convertCurrency = function(amount, sourceCurrencyCode, targetCurrencyCode) {
+				if (sourceCurrencyCode == targetCurrencyCode) {
+					return amount;
+				}
+				else {
+					var sourceCurrency = this._getCurrency(sourceCurrencyCode);
+					var targetCurrency = this._getCurrency(targetCurrencyCode);
+					return amount * sourceCurrency.inEUR / targetCurrency.inEUR;
+				}
+			};
 
 
 			billObject._getCurrency = function (code) {
@@ -139,29 +164,6 @@ angular.module('vacationExpenses.billService', [])
 				}
 
 				throw('Currency ' + code + ' not found.');
-			};
-
-
-			billObject.calculateResult = function () {
-				var result = {};
-
-				angular.forEach(this.names, function (name) {
-					result[name] = {
-						name: name,
-						paid: [],
-						totalPaid: 0,
-					};
-				});
-
-				angular.forEach(this.expenses, function(expense) {
-					result[expense.name].paid.push(Number(expense.amount));
-				});
-
-				angular.forEach(result, function (person, name) {
-					person.totalPaid = sum(person.paid);
-				});
-
-				return result;
 			};
 
 

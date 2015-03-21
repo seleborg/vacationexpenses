@@ -266,50 +266,34 @@ describe('vacationExpenses.billService', function () {
 		});
 
 
-		describe('calculateResult', function () {
-			it("works with only one expense", function () {
-				var bill = billService.createBill({
-					expenses: [
-						{name: 'Joe', amount: 10, purpose: 'Shopping',
-							sharingModel: {equalShares: true, shares: {Joe: 1}}}
-					]
-				});
+		describe('calculatePaid', function () {
+			var bill;
 
-				var result = bill.calculateResult(bill);
-				expect(result.Joe.name).toBe('Joe');
-				expect(result.Joe.totalPaid).toBe(10);
+			beforeEach(function () {
+				bill = billService.createBill({expenses: []});
+				bill.currencies = [
+					{code: 'USD', inEUR: 0.5},
+					{code: 'EUR', inEUR: 1},
+					{code: 'GBP', inEUR: 2},
+				];
 			});
 
 
-			it("divides due in two with equal shares", function () {
-				var bill = billService.createBill({
-					expenses: [
-						{name: 'Joe', amount: 10, purpose: 'Shopping',
-							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
-						{name: 'Bob', amount: 20, purpose: 'Food',
-							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
-					]
-				});
+			it('works in simple cases', function () {
+				bill.addExpense('John', 10, 'EUR', 'Food');
+				bill.addExpense('Laura', 20, 'EUR', 'Bus');
 
-				var result = bill.calculateResult(bill);
-				expect(result.Joe.totalPaid).toBe(10);
-				expect(result.Bob.totalPaid).toBe(20);
+				expect(bill.calculatePaid('John', 'EUR')).toBe(10);
+				expect(bill.calculatePaid('Laura', 'EUR')).toBe(20);
 			});
 
 
-			it("divides due accordingly with unequal shares", function () {
-				var bill = billService.createBill({
-					expenses: [
-						{name: 'Joe', amount: 30, purpose: 'Shopping',
-							sharingModel: {equalShares: false, shares: {Joe: 1, Bob: 2}}},
-						{name: 'Bob', amount: 0, purpose: 'Food',
-							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 1}}},
-					]
-				});
+			it('works with different currencies', function () {
+				bill.addExpense('John', 12, 'USD', 'Food');
 
-				var result = bill.calculateResult(bill);
-				expect(result.Joe.totalPaid).toBe(30);
-				expect(result.Bob.totalPaid).toBe(0);
+				expect(bill.calculatePaid('John', 'USD')).toBe(12);
+				expect(bill.calculatePaid('John', 'EUR')).toBe(6);
+				expect(bill.calculatePaid('John', 'GBP')).toBe(3);
 			});
 		});
 	});
