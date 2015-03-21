@@ -136,6 +136,57 @@ describe('vacationExpenses.billService', function () {
 		});
 
 
+		describe('deleteExpense', function () {
+			it('removes the expense', function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
+						{name: 'Bob', amount: 20, purpose: 'Food',
+							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
+					]
+				});
+
+				bill.deleteExpense(0);
+				expect(bill.expenses[0].name).toBe('Bob');
+			});
+
+
+			it('keeps shares in sync', function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
+						{name: 'Bob', amount: 20, purpose: 'Food',
+							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
+					]
+				});
+
+				bill.deleteExpense(0);
+				expect(bill.expenses[0].sharingModel.shares.Joe).not.toBeDefined();
+				expect(bill.expenses[0].sharingModel.shares.Bob).toBeDefined();
+			});
+
+
+			it('fires the onUpdated callback', function () {
+				var bill = billService.createBill({
+					expenses: [
+						{name: 'Joe', amount: 10, purpose: 'Shopping',
+							sharingModel: {equalShares: true, shares: {Joe: 1}}}
+					]
+				});
+
+				var callbackCalled = false;
+				bill.onUpdated(function () {
+					callbackCalled = true;
+				});
+
+				bill.deleteExpense(0);
+				expect(callbackCalled).toBeTruthy();
+			});
+		});
+
+
 		describe('calculateResult', function () {
 			it("works with only one expense", function () {
 				var bill = billService.createBill({
@@ -185,57 +236,6 @@ describe('vacationExpenses.billService', function () {
 				expect(result.Joe.totalDue).toBe(10);
 				expect(result.Bob.totalPaid).toBe(0);
 				expect(result.Bob.totalDue).toBe(20);
-			});
-		});
-
-
-		describe('deleteExpense', function () {
-			it('removes the expense', function () {
-				var bill = billService.createBill({
-					expenses: [
-						{name: 'Joe', amount: 10, purpose: 'Shopping',
-							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
-						{name: 'Bob', amount: 20, purpose: 'Food',
-							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
-					]
-				});
-
-				bill.deleteExpense(0);
-				expect(bill.expenses[0].name).toBe('Bob');
-			});
-
-
-			it('keeps shares in sync', function () {
-				var bill = billService.createBill({
-					expenses: [
-						{name: 'Joe', amount: 10, purpose: 'Shopping',
-							sharingModel: {equalShares: true, shares: {Joe: 1, Bob: 4}}},
-						{name: 'Bob', amount: 20, purpose: 'Food',
-							sharingModel: {equalShares: true, shares: {Joe: 3, Bob: 4}}},
-					]
-				});
-
-				bill.deleteExpense(0);
-				expect(bill.expenses[0].sharingModel.shares.Joe).not.toBeDefined();
-				expect(bill.expenses[0].sharingModel.shares.Bob).toBeDefined();
-			});
-
-
-			it('fires the onUpdated callback', function () {
-				var bill = billService.createBill({
-					expenses: [
-						{name: 'Joe', amount: 10, purpose: 'Shopping',
-							sharingModel: {equalShares: true, shares: {Joe: 1}}}
-					]
-				});
-
-				var callbackCalled = false;
-				bill.onUpdated(function () {
-					callbackCalled = true;
-				});
-
-				bill.deleteExpense(0);
-				expect(callbackCalled).toBeTruthy();
 			});
 		});
 	});
