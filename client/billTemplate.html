@@ -66,6 +66,13 @@ Loading bill...
 			</tr>
 		</table>
 	</div>
+
+	<h2>Exchange rates</h2>
+	<ul>
+		<li ng-repeat="cur in bill.currencies">
+			<span>1 {{cur.code}} = {{cur.inEUR}} EUR</span>
+		</li>
+	</ul>
 </div>
 <div ng-show="error">
 	<div ng-show="error.status == 404">
