@@ -9,6 +9,7 @@
 	<script src="client/billService.js"></script>
 	<script src="client/billController.js"></script>
 	<script src="client/expenseController.js"></script>
+	<script src="client/resultsController.js"></script>
 	<script src="client/dataStoreService.js"></script>
 </head>
 <body ng-controller="billController">
@@ -54,15 +55,17 @@ Loading bill...
 	</ul>
 
 	<h2>Totals</h2>
-	<table>
-		<tr><th>Person</th><th>Total paid</th><th>Total due</th><th>Balance</th></tr>
-		<tr ng-repeat="name in bill.names" ng-controller="resultController">
-			<td><span>{{name}}</span></td>
-			<td><span>{{totalPaid | currency}}</span></td>
-			<td><span>{{totalDue | currency}}</span></td>
-			<td><span>{{totalPaid - totalDue | currency}}</span></td>
-		</tr>
-	</table>
+	<div ng-controller="resultsController">
+		<table>
+			<tr><th>Person</th><th>Total paid</th><th>Total due</th><th>Balance</th></tr>
+			<tr ng-repeat="result in results">
+				<td><span>{{result.name}}</span></td>
+				<td><span>{{result.totalPaid | currency}}</span></td>
+				<td><span>{{result.totalDue  | currency}}</span></td>
+				<td><span>{{result.balance   | currency}}</span></td>
+			</tr>
+		</table>
+	</div>
 </div>
 <div ng-show="error">
 	<div ng-show="error.status == 404">
