@@ -149,21 +149,10 @@ angular.module('vacationExpenses.billService', [])
 					return amount;
 				}
 				else {
-					var sourceCurrency = this._getCurrency(sourceCurrencyCode);
-					var targetCurrency = this._getCurrency(targetCurrencyCode);
+					var sourceCurrency = this.currencies[sourceCurrencyCode];
+					var targetCurrency = this.currencies[targetCurrencyCode];
 					return amount * sourceCurrency.inEUR / targetCurrency.inEUR;
 				}
-			};
-
-
-			billObject._getCurrency = function (code) {
-				for (var i = 0; i < this.currencies.length; ++i) {
-					if (this.currencies[i].code == code) {
-						return this.currencies[i];
-					}
-				}
-
-				throw('Currency ' + code + ' not found.');
 			};
 
 

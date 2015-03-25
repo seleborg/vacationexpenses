@@ -27,7 +27,7 @@ Loading bill...
 			<div>
 				<input type="text" ng-model="expense.name">
 				<input type="text" ng-model="expense.amount">
-				<select ng-options="cur.code as cur.code for cur in bill.currencies"
+				<select ng-options="code as code for (code, cur) in bill.currencies"
 					    ng-model="expense.currency"></select>
 				<input type="text" ng-model="expense.purpose">
 				<input type="checkbox" ng-model="expense.sharingModel.equalShares">Equal shares</input>
@@ -46,7 +46,7 @@ Loading bill...
 			<form ng-submit="addExpense()">
 				<input type="text" ng-model="newExpense.name">
 				<input type="text" ng-model="newExpense.amount">
-				<select ng-options="cur.code as (cur.code + ' ') for cur in bill.currencies"
+				<select ng-options="code as code for (code, cur) in bill.currencies"
 					    ng-model="newExpense.currency"></select>
 				<input type="text" ng-model="newExpense.purpose">
 				<input type="submit" value="Add">
@@ -66,7 +66,7 @@ Loading bill...
 			<tr ng-repeat="result in results">
 				<td><span>{{result.name}}</span></td>
 				<td><select
-					ng-options="cur.code as (cur.code + ' ') for cur in bill.currencies"
+					ng-options="code as code for (code, cur) in bill.currencies"
 					ng-model="preferredCurrency[result.name]"></select></td>
 				<td><span>{{result.totalPaid | currency}}</span></td>
 				<td><span>{{result.totalDue  | currency}}</span></td>
@@ -77,8 +77,8 @@ Loading bill...
 
 	<h2>Exchange rates</h2>
 	<ul>
-		<li ng-repeat="cur in bill.currencies">
-			<span>1 {{cur.code}} = {{cur.inEUR}} EUR</span>
+		<li ng-repeat="(code, cur) in bill.currencies">
+			<span>1 {{code}} = {{cur.inEUR}} EUR</span>
 		</li>
 	</ul>
 </div>

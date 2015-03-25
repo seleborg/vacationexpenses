@@ -25,11 +25,11 @@ var testBills = {
 						equalShares: true,
 						shares: {Joe: 1, Laura: 1, Bill: 1}}}
 			],
-			currencies: [
-				{code: 'EUR', inEUR: 1},
-				{code: 'USD', inEUR: 0.5},
-				{code: 'GBP', inEUR: 2}
-			]
+			currencies: {
+				USD: { inEUR: 0.5 },
+				EUR: { inEUR: 1 },
+				GBP: { inEUR: 2 }
+			}
 		}
 	}
 };

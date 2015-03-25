@@ -227,11 +227,11 @@ describe('vacationExpenses.billService', function () {
 
 			beforeEach(function () {
 				bill = billService.createBill({expenses: []});
-				bill.currencies = [
-					{code: 'USD', inEUR: 0.5},
-					{code: 'EUR', inEUR: 1},
-					{code: 'GBP', inEUR: 2},
-				];
+				bill.currencies = {
+					USD: { inEUR: 0.5 },
+					EUR: { inEUR: 1 },
+					GBP: { inEUR: 2 }
+				};
 			});
 
 
@@ -271,11 +271,11 @@ describe('vacationExpenses.billService', function () {
 
 			beforeEach(function () {
 				bill = billService.createBill({expenses: []});
-				bill.currencies = [
-					{code: 'USD', inEUR: 0.5},
-					{code: 'EUR', inEUR: 1},
-					{code: 'GBP', inEUR: 2},
-				];
+				bill.currencies = {
+					USD: { inEUR: 0.5 },
+					EUR: { inEUR: 1 },
+					GBP: { inEUR: 2 }
+				};
 			});
 
 
