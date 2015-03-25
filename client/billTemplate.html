@@ -57,9 +57,17 @@ Loading bill...
 	<h2>Totals</h2>
 	<div ng-controller="resultsController">
 		<table>
-			<tr><th>Person</th><th>Total paid</th><th>Total due</th><th>Balance</th></tr>
+			<tr><th>Person</th>
+				<th>Currency</th>
+				<th>Total paid</th>
+				<th>Total due</th>
+				<th>Balance</th>
+			</tr>
 			<tr ng-repeat="result in results">
 				<td><span>{{result.name}}</span></td>
+				<td><select
+					ng-options="cur.code as (cur.code + ' ') for cur in bill.currencies"
+					ng-model="preferredCurrency[result.name]"></select></td>
 				<td><span>{{result.totalPaid | currency}}</span></td>
 				<td><span>{{result.totalDue  | currency}}</span></td>
 				<td><span>{{result.balance   | currency}}</span></td>
