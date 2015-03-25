@@ -34,6 +34,10 @@ angular.module('vacationExpenses.billController', [
 		$scope.error = null;
 		$scope.bill = null;
 
+		$scope.$on('billUpdated', function (event) {
+			$scope.onBillUpdated();
+		});
+
 		$scope.onBillUpdated = function () {
 			var data = {
 				version: 1,

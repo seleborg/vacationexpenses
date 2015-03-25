@@ -29,7 +29,8 @@ var testBills = {
 				USD: { inEUR: 0.5 },
 				EUR: { inEUR: 1 },
 				GBP: { inEUR: 2 }
-			}
+			},
+			referenceCurrency: 'EUR'
 		}
 	}
 };

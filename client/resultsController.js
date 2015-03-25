@@ -16,6 +16,12 @@ angular.module('vacationExpenses.resultsController', [])
 			}
 		}, true);
 
+		$scope.$watch('bill.referenceCurrency', function (newValue, oldValue) {
+			if (newValue !== oldValue) {
+				$scope.$emit('billUpdated');
+			}
+		});
+
 		$scope.updateResults = function () {
 			$scope.results = {};
 			angular.forEach($scope.bill.names, function (name) {
