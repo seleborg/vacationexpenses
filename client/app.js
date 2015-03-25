@@ -1,4 +1,5 @@
 angular.module('vacationExpenses.app', [
 	'vacationExpenses.billController',
 	'vacationExpenses.expenseController',
-	'vacationExpenses.resultsController']);
+	'vacationExpenses.resultsController',
+	'vacationExpenses.exchangeRatesController']);

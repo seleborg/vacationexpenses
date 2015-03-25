@@ -10,6 +10,7 @@
 	<script src="client/billController.js"></script>
 	<script src="client/expenseController.js"></script>
 	<script src="client/resultsController.js"></script>
+	<script src="client/exchangeRatesController.js"></script>
 	<script src="client/dataStoreService.js"></script>
 </head>
 <body ng-controller="billController">
@@ -76,15 +77,17 @@ Loading bill...
 	</div>
 
 	<h2>Exchange rates</h2>
-	Reference currency:
-	<select ng-options="code as code for (code, cur) in bill.currencies"
-			ng-model="bill.referenceCurrency"></select>
+	<div ng-controller="exchangeRatesController">
+		Reference currency:
+		<select ng-options="code as code for (code, cur) in bill.currencies"
+				ng-model="bill.referenceCurrency"></select>
 
-	<ul>
-		<li ng-repeat="(code, cur) in bill.currencies">
-			<span>1 {{code}} = {{cur.inEUR / bill.currencies[bill.referenceCurrency].inEUR}} {{bill.referenceCurrency}}</span>
-		</li>
-	</ul>
+		<ul>
+			<li ng-repeat="(code, cur) in bill.currencies">
+				<span>1 {{code}} = {{cur.inEUR / bill.currencies[bill.referenceCurrency].inEUR}} {{bill.referenceCurrency}}</span>
+			</li>
+		</ul>
+	</div>
 </div>
 <div ng-show="error">
 	<div ng-show="error.status == 404">
