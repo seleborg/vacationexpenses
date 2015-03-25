@@ -83,8 +83,12 @@ Loading bill...
 				ng-model="bill.referenceCurrency"></select>
 
 		<ul>
-			<li ng-repeat="(code, cur) in bill.currencies">
-				<span>1 {{code}} = {{cur.inEUR / bill.currencies[bill.referenceCurrency].inEUR}} {{bill.referenceCurrency}}</span>
+			<li ng-repeat="(code, cur) in bill.currencies" ng-if="code != bill.referenceCurrency">
+				<span>
+					1 {{bill.referenceCurrency}} =
+					<input type="text" ng-model="displayedExchangeRates[code]">
+					{{code}}
+				</span>
 			</li>
 		</ul>
 	</div>
