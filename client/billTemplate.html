@@ -91,6 +91,17 @@ Loading bill...
 				</span>
 			</li>
 		</ul>
+
+		<form ng-submit="addCurrency()">
+			<div ng-show="!isFetchingExchangeRate">
+				Add currency:
+				<input type="text" ng-model="newCurrency">
+				<input type="submit" value="Add">
+			</div>
+			<div ng-show="isFetchingExchangeRate">
+				Looking up exchange rate for {{newCurrency}}...
+			</div>
+		</form>
 	</div>
 </div>
 <div ng-show="error">

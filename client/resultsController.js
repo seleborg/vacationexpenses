@@ -26,7 +26,7 @@ angular.module('vacationExpenses.resultsController', [])
 			if (newValue !== oldValue) {
 				$scope.updateResults();
 			}
-		});
+		}, true);
 
 		$scope.updateResults = function () {
 			$scope.results = {};
