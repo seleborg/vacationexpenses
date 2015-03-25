@@ -69,9 +69,9 @@ Loading bill...
 				<td><select
 					ng-options="code as code for (code, cur) in bill.currencies"
 					ng-model="preferredCurrency[result.name]"></select></td>
-				<td><span>{{result.totalPaid | currency}}</span></td>
-				<td><span>{{result.totalDue  | currency}}</span></td>
-				<td><span>{{result.balance   | currency}}</span></td>
+				<td><span>{{result.totalPaid | ve_currency : preferredCurrency[result.name]}}</span></td>
+				<td><span>{{result.totalDue  | ve_currency : preferredCurrency[result.name]}}</span></td>
+				<td><span>{{result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
 			</tr>
 		</table>
 	</div>
