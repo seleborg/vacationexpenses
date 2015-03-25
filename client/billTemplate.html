@@ -62,7 +62,8 @@ Loading bill...
 				<th>Currency</th>
 				<th>Total paid</th>
 				<th>Total due</th>
-				<th>Balance</th>
+				<th>Pays</th>
+				<th>Receives</th>
 			</tr>
 			<tr ng-repeat="result in results">
 				<td><span>{{result.name}}</span></td>
@@ -71,7 +72,8 @@ Loading bill...
 					ng-model="preferredCurrency[result.name]"></select></td>
 				<td><span>{{result.totalPaid | ve_currency : preferredCurrency[result.name]}}</span></td>
 				<td><span>{{result.totalDue  | ve_currency : preferredCurrency[result.name]}}</span></td>
-				<td><span>{{result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
+				<td><span ng-if="result.balance <= 0">{{-result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
+				<td><span ng-if="result.balance > 0">{{result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
 			</tr>
 		</table>
 	</div>
