@@ -134,10 +134,12 @@ angular.module('vacationExpenses.billService', [])
 
 				angular.forEach(this.expenses, function (expense) {
 					if (expense.name == name) {
-						totalPaid += billObject._convertCurrency(
-							expense.amount,
+						var convertedAmount = billObject._convertCurrency(
+							Number(expense.amount),
 							expense.currency,
 							targetCurrencyCode);
+
+						totalPaid += convertedAmount;
 					}
 				});
 
