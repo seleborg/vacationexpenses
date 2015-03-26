@@ -2,8 +2,13 @@
 <html lang="en" ng-app="vacationExpenses.app">
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<base href="/">
+
 	<title>Vacation Expenses</title>
+
 	<script src="lib/angular/angular.js"></script>
 	<script src="client/app.js"></script>
 	<script src="client/billService.js"></script>
@@ -12,6 +17,15 @@
 	<script src="client/resultsController.js"></script>
 	<script src="client/exchangeRatesController.js"></script>
 	<script src="client/dataStoreService.js"></script>
+
+	<link href="lib/bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
 </head>
 <body ng-controller="billController">
 
@@ -29,7 +43,7 @@ Loading bill...
 				<input type="text" ng-model="expense.name">
 				<input type="text" ng-model="expense.amount">
 				<select ng-options="code as code for (code, cur) in bill.currencies"
-					    ng-model="expense.currency"></select>
+						ng-model="expense.currency"></select>
 				<input type="text" ng-model="expense.purpose">
 				<input type="checkbox" ng-model="expense.sharingModel.equalShares">Equal shares</input>
 				<a ng-click="deleteExpense($index)" href="#">Remove</a>
@@ -48,7 +62,7 @@ Loading bill...
 				<input type="text" ng-model="newExpense.name">
 				<input type="text" ng-model="newExpense.amount">
 				<select ng-options="code as code for (code, cur) in bill.currencies"
-					    ng-model="newExpense.currency"></select>
+						ng-model="newExpense.currency"></select>
 				<input type="text" ng-model="newExpense.purpose">
 				<input type="submit" value="Add">
 			</form>
