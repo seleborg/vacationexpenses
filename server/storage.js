@@ -12,17 +12,25 @@ var testBills = {
 		version: 1,
 		bill: {
 			expenses: [
-				{name: "Joe", amount: "99", purpose: "Whisky",
-					sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-				{name: "Laura", amount: "12", purpose: "Cheese",
-					sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-				{name: "Laura", amount: "37", purpose: "Restaurant Saturday",
-					sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-				{name: "Joe", amount: "45", purpose: "Movie",
-					sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}},
-				{name: "Joe", amount: "12", purpose: "Coffee",
-					sharingModel: {equalShares: true, shares: {"Joe": 1, "Laura": 1}}}
-			]
+				{name: 'Joe', amount: '100', currency: 'EUR', purpose: 'Wine',
+					sharingModel: {
+						equalShares: true,
+						shares: {Joe: 1, Laura: 1, Bill: 1}}},
+				{name: 'Laura', amount: '50', currency: 'USD', purpose: 'Bourbon',
+					sharingModel: {
+						equalShares: true,
+						shares: {Joe: 1, Laura: 1, Bill: 1}}},
+				{name: 'Bill', amount: '25', currency: 'GBP', purpose: 'Scotch',
+					sharingModel: {
+						equalShares: true,
+						shares: {Joe: 1, Laura: 1, Bill: 1}}}
+			],
+			currencies: {
+				USD: { inEUR: 0.5 },
+				EUR: { inEUR: 1 },
+				GBP: { inEUR: 2 }
+			},
+			referenceCurrency: 'EUR'
 		}
 	}
 };

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" ng-app="vacationExpenses.app">
+<head>
+	<meta charset="utf-8">
+	<base href="/">
+	<title>Vacation Expenses</title>
+	<script src="lib/angular/angular.js"></script>
+	<script src="client/app.js"></script>
+	<script src="client/billService.js"></script>
+	<script src="client/billController.js"></script>
+	<script src="client/expenseController.js"></script>
+	<script src="client/resultsController.js"></script>
+	<script src="client/exchangeRatesController.js"></script>
+	<script src="client/dataStoreService.js"></script>
+</head>
+<body ng-controller="billController">
+
+<h1>Vacation Expenses</h1>
+Find out who should pay what at the end of a common vacation.
+
+<div ng-show="!billLoaded && !error">
+Loading bill...
+</div>
+<div ng-show="billLoaded">
+	<h2>Who paid what?</h2>
+	<ul>
+		<li ng-repeat="expense in bill.expenses track by $index" ng-controller="expenseController">
+			<div>
+				<input type="text" ng-model="expense.name">
+				<input type="text" ng-model="expense.amount">
+				<select ng-options="code as code for (code, cur) in bill.currencies"
+					    ng-model="expense.currency"></select>
+				<input type="text" ng-model="expense.purpose">
+				<input type="checkbox" ng-model="expense.sharingModel.equalShares">Equal shares</input>
+				<a ng-click="deleteExpense($index)" href="#">Remove</a>
+			</div>
+			<div ng-show="!expense.sharingModel.equalShares">
+				<ul>
+					<li ng-repeat="(name, share) in expense.sharingModel.shares"><div>
+						<span>{{name}}</span>
+						<input type="text" ng-model="expense.sharingModel.shares[name]">
+					</div>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<form ng-submit="addExpense()">
+				<input type="text" ng-model="newExpense.name">
+				<input type="text" ng-model="newExpense.amount">
+				<select ng-options="code as code for (code, cur) in bill.currencies"
+					    ng-model="newExpense.currency"></select>
+				<input type="text" ng-model="newExpense.purpose">
+				<input type="submit" value="Add">
+			</form>
+		</li>
+	</ul>
+
+	<h2>Totals</h2>
+	<div ng-controller="resultsController">
+		<table>
+			<tr><th>Person</th>
+				<th>Currency</th>
+				<th>Total paid</th>
+				<th>Total due</th>
+				<th>Balance</th>
+			</tr>
+			<tr ng-repeat="result in results">
+				<td><span>{{result.name}}</span></td>
+				<td><select
+					ng-options="code as code for (code, cur) in bill.currencies"
+					ng-model="preferredCurrency[result.name]"></select></td>
+				<td><span>{{result.totalPaid | currency}}</span></td>
+				<td><span>{{result.totalDue  | currency}}</span></td>
+				<td><span>{{result.balance   | currency}}</span></td>
+			</tr>
+		</table>
+	</div>
+
+	<h2>Exchange rates</h2>
+	<div ng-controller="exchangeRatesController">
+		Reference currency:
+		<select ng-options="code as code for (code, cur) in bill.currencies"
+				ng-model="bill.referenceCurrency"></select>
+
+		<ul>
+			<li ng-repeat="(code, cur) in bill.currencies" ng-if="code != bill.referenceCurrency">
+				<span>
+					1 {{bill.referenceCurrency}} =
+					<input type="text" ng-model="displayedExchangeRates[code]">
+					{{code}}
+				</span>
+			</li>
+		</ul>
+
+		<form ng-submit="addCurrency()">
+			<div ng-show="!isFetchingExchangeRate">
+				Add currency:
+				<input type="text" ng-model="newCurrency">
+				<input type="submit" value="Add">
+			</div>
+			<div ng-show="isFetchingExchangeRate">
+				Looking up exchange rate for {{newCurrency}}...
+			</div>
+		</form>
+	</div>
+</div>
+<div ng-show="error">
+	<div ng-show="error.status == 404">
+		<h1>Not found</h1>
+	</div>
+	<div ng-show="error.status != 404">
+		<h1>Error {{error.status}}</h1>
+	</div>
+</div>
+</body>
+</html>

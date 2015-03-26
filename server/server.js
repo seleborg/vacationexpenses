@@ -32,7 +32,7 @@ app.use('/lib', express.static(path.resolve(SERVER_ROOT, 'lib')));
 
 app.get('/*', function (req, res) {
 	var url = req.params[0];
-	res.sendFile(path.resolve(SERVER_ROOT, 'client/bill.html'));
+	res.sendFile(path.resolve(SERVER_ROOT, 'client/billTemplate.html'));
 });
 
 app.listen(PORT);
