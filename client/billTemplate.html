@@ -27,7 +27,7 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-<body ng-controller="billController">
+<body ng-controller="billController" class="container">
 
 <h1>Vacation Expenses</h1>
 Find out who should pay what at the end of a common vacation.
@@ -70,26 +70,32 @@ Loading bill...
 	</ul>
 
 	<h2>Totals</h2>
-	<div ng-controller="resultsController">
-		<table>
-			<tr><th>Person</th>
-				<th>Currency</th>
-				<th>Total paid</th>
-				<th>Total due</th>
-				<th>Pays</th>
-				<th>Receives</th>
-			</tr>
-			<tr ng-repeat="result in results">
-				<td><span>{{result.name}}</span></td>
-				<td><select
-					ng-options="code as code for (code, cur) in bill.currencies"
-					ng-model="preferredCurrency[result.name]"></select></td>
-				<td><span>{{result.totalPaid | ve_currency : preferredCurrency[result.name]}}</span></td>
-				<td><span>{{result.totalDue  | ve_currency : preferredCurrency[result.name]}}</span></td>
-				<td><span ng-if="result.balance <= 0">{{-result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
-				<td><span ng-if="result.balance > 0">{{result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
-			</tr>
-		</table>
+	<div class="row" ng-controller="resultsController">
+		<div class="col-md-8">
+			<table class="table table-striped">
+				<thead>
+					<tr><th>Person</th>
+						<th>Currency</th>
+						<th>Total paid</th>
+						<th>Total due</th>
+						<th>Pays</th>
+						<th>Receives</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="result in results">
+						<td><span>{{result.name}}</span></td>
+						<td><select
+							ng-options="code as code for (code, cur) in bill.currencies"
+							ng-model="preferredCurrency[result.name]"></select></td>
+						<td><span>{{result.totalPaid | ve_currency : preferredCurrency[result.name]}}</span></td>
+						<td><span>{{result.totalDue  | ve_currency : preferredCurrency[result.name]}}</span></td>
+						<td><span ng-if="result.balance <= 0">{{-result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
+						<td><span ng-if="result.balance > 0">{{result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 	<h2>Exchange rates</h2>
