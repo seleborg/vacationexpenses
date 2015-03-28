@@ -85,7 +85,11 @@ angular.module('vacationExpenses.billService', [])
 
 
 			billObject.updateExpense = function (index, newExpense) {
-				this.expenses[index] = newExpense;
+				var e = this.expenses[index];
+				angular.forEach(newExpense, function (value, key) {
+					e[key] = value;
+				});
+
 				this._fixShares();
 				this._triggerOnUpdated();
 			}
