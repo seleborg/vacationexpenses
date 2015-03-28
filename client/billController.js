@@ -35,10 +35,12 @@ angular.module('vacationExpenses.billController', [
 		$scope.bill = null;
 
 		$scope.$on('billUpdated', function (event) {
+			// console.log('billController.$on.billUpdated');
 			$scope.onBillUpdated();
 		});
 
 		$scope.onBillUpdated = function () {
+			// console.log('billController.onBillUpdated');
 			var data = {
 				version: 1,
 				bill: $scope.bill

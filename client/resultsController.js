@@ -5,30 +5,36 @@ angular.module('vacationExpenses.resultsController', [])
 
 		$scope.$watch('billLoaded', function (loaded) {
 			if (loaded) {
+				//console.log('resultsController.$watch.billLoaded');
 				$scope.bill.onUpdated($scope.updateResults);
 				$scope.updateResults();
+
+				$scope.$watch('bill.referenceCurrency', function (newValue, oldValue) {
+					if (newValue !== oldValue) {
+						// console.log('resultsController.$watch.bill.referenceCurrency ' + newValue + ', ' + oldValue);
+						$scope.$emit('billUpdated');
+					}
+				});
+
+				$scope.$watch('bill.currencies', function (newValue, oldValue) {
+					if (newValue !== oldValue) {
+						// console.log('resultsController.$watch.bill.currencies');
+						$scope.updateResults();
+					}
+				}, true);
+
+				$scope.$watch('preferredCurrency', function (newValue, oldValue) {
+					if (newValue !== oldValue) {
+						// console.log('resultsController.$watch.preferredCurrency');
+						$scope.updateResults();
+					}
+				}, true);
 			}
 		});
 
-		$scope.$watch('preferredCurrency', function (newValue, oldValue) {
-			if (newValue !== oldValue) {
-				$scope.updateResults();
-			}
-		}, true);
-
-		$scope.$watch('bill.referenceCurrency', function (newValue, oldValue) {
-			if (newValue !== oldValue) {
-				$scope.$emit('billUpdated');
-			}
-		});
-
-		$scope.$watch('bill.currencies', function (newValue, oldValue) {
-			if (newValue !== oldValue) {
-				$scope.updateResults();
-			}
-		}, true);
 
 		$scope.updateResults = function () {
+			// console.log('resultsController.updateResults');
 			$scope.results = {};
 			angular.forEach($scope.bill.names, function (name) {
 				if (!angular.isDefined($scope.preferredCurrency[name])) {
