@@ -7,26 +7,27 @@ angular.module('vacationExpenses.resultsController', [])
 			if (loaded) {
 				$scope.bill.onUpdated($scope.updateResults);
 				$scope.updateResults();
+
+				$scope.$watch('bill.referenceCurrency', function (newValue, oldValue) {
+					if (newValue !== oldValue) {
+						$scope.$emit('billUpdated');
+					}
+				});
+
+				$scope.$watch('bill.currencies', function (newValue, oldValue) {
+					if (newValue !== oldValue) {
+						$scope.updateResults();
+					}
+				}, true);
+
+				$scope.$watch('preferredCurrency', function (newValue, oldValue) {
+					if (newValue !== oldValue) {
+						$scope.updateResults();
+					}
+				}, true);
 			}
 		});
 
-		$scope.$watch('preferredCurrency', function (newValue, oldValue) {
-			if (newValue !== oldValue) {
-				$scope.updateResults();
-			}
-		}, true);
-
-		$scope.$watch('bill.referenceCurrency', function (newValue, oldValue) {
-			if (newValue !== oldValue) {
-				$scope.$emit('billUpdated');
-			}
-		});
-
-		$scope.$watch('bill.currencies', function (newValue, oldValue) {
-			if (newValue !== oldValue) {
-				$scope.updateResults();
-			}
-		}, true);
 
 		$scope.updateResults = function () {
 			$scope.results = {};
