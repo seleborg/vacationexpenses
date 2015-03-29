@@ -7,3 +7,11 @@
 .exchange-rates td input {
 	width: 100%;
 }
+
+#new-currency {
+	width: 50px !important;
+}
+
+#add-currency {
+	width: 50px;
+}

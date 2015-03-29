@@ -102,6 +102,7 @@ Loading bill...
 	<h2>Exchange rates</h2>
 	<div class="row" ng-controller="exchangeRatesController">
 		<div class="col-md-6">
+			<form ng-submit="addCurrency()">
 				<table class="table table-striped exchange-rates">
 					<thead>
 						<tr>
@@ -118,20 +119,23 @@ Loading bill...
 							<td><input type="text" ng-model="displayedExchangeRates[code]"></td>
 						</tr>
 					</tbody>
+					<tfoot>
+						<tr class="new-currency">
+							<td><input
+								type="text"
+								ng-model="newCurrency"
+								id="new-currency"
+								ng-disabled="isFetchingExchangeRate"></td>
+							<td><input
+								type="submit"
+								value="Add"
+								id="add-currency"
+								ng-disabled="isFetchingExchangeRate"></td>
+						</tr>
+					</tfoot>
 				</table>
-			</div>
+			</form>
 		</div>
-
-		<form ng-submit="addCurrency()">
-			<div ng-show="!isFetchingExchangeRate">
-				Add currency:
-				<input type="text" ng-model="newCurrency">
-				<input type="submit" value="Add">
-			</div>
-			<div ng-show="isFetchingExchangeRate">
-				Looking up exchange rate for {{newCurrency}}...
-			</div>
-		</form>
 	</div>
 </div>
 <div ng-show="error">
