@@ -1,6 +1,26 @@
 angular.module('vacationExpenses.expenseController', [])
 	.controller('expenseController', ['$scope', function ($scope) {
-		$scope.participantStatus = {};
+		$scope.toggleParticipantIfEqualShares = function (name) {
+			if (!$scope.expense.sharingModel.equalShares) {
+				return;
+			}
+
+			var shares = Number($scope.expense.sharingModel.shares[name]);
+			if (shares != 0) {
+				var newShares = 0;
+			}
+			else {
+				var newShares = 1;
+			}
+			$scope.expense.sharingModel.shares[name] = newShares;
+		}
+
+		$scope.createNgClassObject = function (name) {
+			var o = {};
+			o[$scope.participantStatus[name]] = true;
+			o['participant-clickable'] = $scope.expense.sharingModel.equalShares;
+			return o;
+		}
 
 		$scope.$watch('expense', function (expense, oldExpense) {
 			if (expense !== oldExpense) {
