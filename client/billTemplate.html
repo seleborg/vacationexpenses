@@ -2,8 +2,13 @@
 <html lang="en" ng-app="vacationExpenses.app">
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<base href="/">
+
 	<title>Vacation Expenses</title>
+
 	<script src="lib/angular/angular.js"></script>
 	<script src="client/app.js"></script>
 	<script src="client/billService.js"></script>
@@ -12,8 +17,18 @@
 	<script src="client/resultsController.js"></script>
 	<script src="client/exchangeRatesController.js"></script>
 	<script src="client/dataStoreService.js"></script>
+
+	<link href="lib/bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="client/bill.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
 </head>
-<body ng-controller="billController">
+<body ng-controller="billController" class="container">
 
 <h1>Vacation Expenses</h1>
 Find out who should pay what at the end of a common vacation.
@@ -23,13 +38,13 @@ Loading bill...
 </div>
 <div ng-show="billLoaded">
 	<h2>Who paid what?</h2>
-	<ul>
+	<ul class="expenses-list">
 		<li ng-repeat="expense in bill.expenses" ng-controller="expenseController">
 			<div>
 				<input type="text" ng-model="expense.name">
 				<input type="text" ng-model="expense.amount">
 				<select ng-options="code as code for (code, cur) in bill.currencies"
-					    ng-model="expense.currency"></select>
+						ng-model="expense.currency"></select>
 				<input type="text" ng-model="expense.purpose">
 				<input type="checkbox" ng-model="expense.sharingModel.equalShares">Equal shares</input>
 				<a ng-click="deleteExpense($index)" href="#">Remove</a>
@@ -48,7 +63,7 @@ Loading bill...
 				<input type="text" ng-model="newExpense.name">
 				<input type="text" ng-model="newExpense.amount">
 				<select ng-options="code as code for (code, cur) in bill.currencies"
-					    ng-model="newExpense.currency"></select>
+						ng-model="newExpense.currency"></select>
 				<input type="text" ng-model="newExpense.purpose">
 				<input type="submit" value="Add">
 			</form>
@@ -56,52 +71,71 @@ Loading bill...
 	</ul>
 
 	<h2>Totals</h2>
-	<div ng-controller="resultsController">
-		<table>
-			<tr><th>Person</th>
-				<th>Currency</th>
-				<th>Total paid</th>
-				<th>Total due</th>
-				<th>Balance</th>
-			</tr>
-			<tr ng-repeat="result in results">
-				<td><span>{{result.name}}</span></td>
-				<td><select
-					ng-options="code as code for (code, cur) in bill.currencies"
-					ng-model="preferredCurrency[result.name]"></select></td>
-				<td><span>{{result.totalPaid | currency}}</span></td>
-				<td><span>{{result.totalDue  | currency}}</span></td>
-				<td><span>{{result.balance   | currency}}</span></td>
-			</tr>
-		</table>
+	<div class="row" ng-controller="resultsController">
+		<div class="col-md-8">
+			<table class="table table-striped">
+				<thead>
+					<tr><th>Person</th>
+						<th>Currency</th>
+						<th>Total paid</th>
+						<th>Total due</th>
+						<th>Pays</th>
+						<th>Receives</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="result in results">
+						<td><span>{{result.name}}</span></td>
+						<td><select
+							ng-options="code as code for (code, cur) in bill.currencies"
+							ng-model="preferredCurrency[result.name]"></select></td>
+						<td><span>{{result.totalPaid | ve_currency : preferredCurrency[result.name]}}</span></td>
+						<td><span>{{result.totalDue  | ve_currency : preferredCurrency[result.name]}}</span></td>
+						<td><span ng-if="result.balance <= 0">{{-result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
+						<td><span ng-if="result.balance > 0">{{result.balance   | ve_currency : preferredCurrency[result.name]}}</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 	<h2>Exchange rates</h2>
-	<div ng-controller="exchangeRatesController">
-		Reference currency:
-		<select ng-options="code as code for (code, cur) in bill.currencies"
-				ng-model="bill.referenceCurrency"></select>
-
-		<ul>
-			<li ng-repeat="(code, cur) in bill.currencies" ng-if="code != bill.referenceCurrency">
-				<span>
-					1 {{bill.referenceCurrency}} =
-					<input type="text" ng-model="displayedExchangeRates[code]">
-					{{code}}
-				</span>
-			</li>
-		</ul>
-
-		<form ng-submit="addCurrency()">
-			<div ng-show="!isFetchingExchangeRate">
-				Add currency:
-				<input type="text" ng-model="newCurrency">
-				<input type="submit" value="Add">
-			</div>
-			<div ng-show="isFetchingExchangeRate">
-				Looking up exchange rate for {{newCurrency}}...
-			</div>
-		</form>
+	<div class="row" ng-controller="exchangeRatesController">
+		<div class="col-md-6">
+			<form ng-submit="addCurrency()">
+				<table class="table table-striped exchange-rates">
+					<thead>
+						<tr>
+							<th><label>Reference:</label></th>
+							<th><select
+								ng-options="code as code for (code, cur) in bill.currencies"
+								ng-model="bill.referenceCurrency"></select>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(code, cur) in bill.currencies" ng-if="code != bill.referenceCurrency">
+							<td>{{code}}</td>
+							<td><input type="text" ng-model="displayedExchangeRates[code]"></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr class="new-currency">
+							<td><input
+								type="text"
+								ng-model="newCurrency"
+								id="new-currency"
+								ng-disabled="isFetchingExchangeRate"></td>
+							<td><input
+								type="submit"
+								value="Add"
+								id="add-currency"
+								ng-disabled="isFetchingExchangeRate"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+		</div>
 	</div>
 </div>
 <div ng-show="error">
@@ -112,5 +146,7 @@ Loading bill...
 		<h1>Error {{error.status}}</h1>
 	</div>
 </div>
+
+<script src="lib/jquery-1.11.2.min.js"></script>
 </body>
 </html>

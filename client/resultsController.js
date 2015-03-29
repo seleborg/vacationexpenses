@@ -51,4 +51,21 @@ angular.module('vacationExpenses.resultsController', [])
 				};
 			});
 		};
-	}]);
+	}])
+
+
+	.filter('ve_currency', [function () {
+		return function (amount, currencySymbol) {
+			if (angular.isUndefined(currencySymbol)) {
+				currencySymbol = '';
+			}
+			else {
+				currencySymbol = currencySymbol + ' ';
+			}
+
+			// if null or undefined pass it through
+			return (amount == null)
+				? amount
+				: currencySymbol + Number(amount).toFixed(2);
+		};
+	}])
