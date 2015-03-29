@@ -38,37 +38,56 @@ Loading bill...
 </div>
 <div ng-show="billLoaded">
 	<h2>Who paid what?</h2>
-	<ul class="expenses-list">
-		<li ng-repeat="expense in bill.expenses" ng-controller="expenseController">
-			<div>
-				<input type="text" ng-model="expense.name">
-				<input type="text" ng-model="expense.amount">
-				<select ng-options="code as code for (code, cur) in bill.currencies"
-						ng-model="expense.currency"></select>
-				<input type="text" ng-model="expense.purpose">
-				<input type="checkbox" ng-model="expense.sharingModel.equalShares">Equal shares</input>
-				<a ng-click="deleteExpense($index)" href="#">Remove</a>
-			</div>
-			<div ng-show="!expense.sharingModel.equalShares">
-				<ul>
-					<li ng-repeat="(name, share) in expense.sharingModel.shares"><div>
-						<span>{{name}}</span>
-						<input type="text" ng-model="expense.sharingModel.shares[name]">
-					</div>
-				</ul>
-			</div>
-		</li>
-		<li>
-			<form ng-submit="addExpense()">
-				<input type="text" ng-model="newExpense.name">
-				<input type="text" ng-model="newExpense.amount">
-				<select ng-options="code as code for (code, cur) in bill.currencies"
-						ng-model="newExpense.currency"></select>
-				<input type="text" ng-model="newExpense.purpose">
-				<input type="submit" value="Add">
-			</form>
-		</li>
-	</ul>
+
+	<div>
+		<div ng-repeat="expense in bill.expenses"
+			 ng-controller="expenseController"
+			 class="row">
+			<div class="col-lg-12 expense">
+				<div class="td-name">
+					<input type="text" ng-model="expense.name" class="expense-name">
+				</div>
+				<div class="td-amount">
+					<input type="text" ng-model="expense.amount" class="expense-amount">
+					<select ng-options="code as code for (code, cur) in bill.currencies"
+							ng-model="expense.currency"></select>
+				</div>
+				<div class="td-purpose">
+					<input type="text" ng-model="expense.purpose" class="expense-purpose">
+				</div>
+				<div class="td-remove">
+					<span class="expense-remove glyphicon glyphicon-trash" ng-click="deleteExpense($index)"></span>
+				</div>
+				<div class="td-equal-shares">
+					<input type="checkbox" ng-model="expense.sharingModel.equalShares">
+				</div>
+				<div class="td-shares">
+					<ul>
+						<li ng-repeat="name in bill.names"
+							class="participant"
+							ng-class="participantStatus[name]">
+							<div class="participant-icon glyphicon glyphicon-user"
+								 ng-show="participantStatus[name] != 'participant-number'"></div>
+							<input type="text"
+								   ng-model="expense.sharingModel.shares[name]"
+								   ng-show="participantStatus[name] == 'participant-number'"
+								   class="participant-share-input">
+							<div class="participant-name-small">{{name}}</div>
+						</li>
+					</ul>
+				</div>
+			 </div>
+		</div>
+	</div>
+
+	<form ng-submit="addExpense()">
+		<input type="text" ng-model="newExpense.name">
+		<input type="text" ng-model="newExpense.amount">
+		<select ng-options="code as code for (code, cur) in bill.currencies"
+				ng-model="newExpense.currency"></select>
+		<input type="text" ng-model="newExpense.purpose">
+		<input type="submit" value="Add">
+	</form>
 
 	<h2>Totals</h2>
 	<div class="row" ng-controller="resultsController">
