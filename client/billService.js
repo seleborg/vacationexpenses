@@ -11,10 +11,16 @@ angular.module('vacationExpenses.billService', [])
 		}
 
 
+		function effectiveShares(equalShares, shares) {
+			shares = Number(shares);
+			return equalShares ? (shares != 0 ? 1 : 0) : shares;
+		}
+
+
 		function sumShares(expense) {
 			var sum = 0;
-			angular.forEach(expense.sharingModel.shares, function (share, _) {
-				sum += expense.sharingModel.equalShares ? 1 : Number(share);
+			angular.forEach(expense.sharingModel.shares, function (shares, _) {
+				sum += effectiveShares(expense.sharingModel.equalShares, shares);
 			});
 			return sum;
 		}
@@ -114,16 +120,15 @@ angular.module('vacationExpenses.billService', [])
 						var due = 0;
 					}
 					else {
-						var effectiveShares =
-							expense.sharingModel.equalShares
-							? 1
-							: Number(expense.sharingModel.shares[name]);
+						var shares = effectiveShares(
+							expense.sharingModel.equalShares,
+							expense.sharingModel.shares[name]);
 
 						var due = billObject._convertCurrency(
 									amount,
 									expense.currency,
 									targetCurrencyCode)
-							* (effectiveShares / totalShares);
+							* (shares / totalShares);
 					}
 
 					totalDue += due;
