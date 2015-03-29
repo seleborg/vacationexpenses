@@ -1,8 +1,93 @@
-.expenses-list {
-	list-style-type: none;
-	padding: 0;
+.expense {
+	vertical-align: middle;
 }
 
+.expense:hover {
+	/*background-color: #eeeeee;*/
+}
+
+.expense input, .expense select {
+	border: none;
+	padding: 3px;
+	margin: 5px;
+}
+
+.td-name, .td-amount, .td-purpose, .td-equal-shares, .td-shares, .td-remove {
+	display: inline;
+}
+
+.expense-name {
+	display: inline;
+	width: 90px;
+}
+
+.expense-amount {
+	width: 85px;
+	text-align: right;
+	margin-right: 10px;
+}
+
+.expense-purpose {
+	width: 250px;
+}
+
+.expense-remove {
+	cursor: pointer;
+	margin-right: 35px;
+}
+
+.td-shares ul {
+	list-style: none;
+	display: inline;
+	position: relative;
+	padding-left: 0;
+}
+
+.td-shares li {
+	display: inline-block;
+}
+
+.participant {
+	margin-left: 10px;
+	width: 35px;
+	padding: 3px;
+	text-align: center;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+.participant-clickable:hover {
+	cursor: pointer;
+	font-weight: bold;
+	/*color: #666666;*/
+}
+
+.participant-icon {
+	display: block;
+	padding: 0;
+	vertical-align: middle;
+}
+
+.participant-name-small, .participant-share-input {
+	font-size: xx-small;
+}
+
+.participant-active {
+	color: #666666;
+}
+
+.participant-inactive {
+	color: #DFDFDF;
+}
+
+.participant-share-input {
+	border: none;
+	text-align: center;
+	width: 25px;
+	padding: 0px !important;
+	margin: 0px !important;
+	height: 14px;
+}
 
 .exchange-rates td input {
 	width: 100%;

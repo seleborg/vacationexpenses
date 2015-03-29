@@ -256,6 +256,20 @@ describe('vacationExpenses.billService', function () {
 			});
 
 
+			it('works with equal shares', function () {
+				bill.addExpense('John', 10, 'EUR', 'Food');
+
+				bill.expenses[0].sharingModel.equalShares = true;
+				bill.expenses[0].sharingModel.shares.John = 3;
+				bill.expenses[0].sharingModel.shares.Laura = 1;
+				bill.expenses[0].sharingModel.shares.Sandy = 0;
+
+				expect(bill.calculateDue('John', 'EUR')).toBe(5);
+				expect(bill.calculateDue('Laura', 'EUR')).toBe(5);
+				expect(bill.calculateDue('Sandy', 'EUR')).toBe(0);
+			});
+
+
 			it('works with different currencies', function () {
 				bill.addExpense('John', 12, 'USD', 'Food');
 
