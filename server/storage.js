@@ -10,6 +10,7 @@ var testBills = {
 	'example1': {
 		status: 200,
 		version: 1,
+		locked: true,
 		bill: {
 			expenses: [
 				{name: 'Joe', amount: '100', currency: 'EUR', purpose: 'Wine',
@@ -64,10 +65,12 @@ exports.fetchBill = function (url, callback) {
 // };
 exports.storeBill = function (url, data, callback) {
 	if (url in testBills) {
-		var response = testBills[url];
-		response.version = data.version;
-		response.bill = data.bill;
-		callback(200);
+		var bill = testBills[url];
+		if (!bill.locked) {
+			bill.version = data.version;
+			bill.bill = data.bill;
+		}
+		callback(bill.status);
 	}
 	else {
 		storeBillIntoAzureStorage(url, data, callback);
