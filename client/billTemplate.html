@@ -88,7 +88,7 @@ Loading bill...
 		<select ng-options="code as code for (code, cur) in bill.currencies"
 				ng-model="newExpense.currency"></select>
 		<input type="text" ng-model="newExpense.purpose">
-		<input type="submit" value="Add">
+		<input type="submit" value="Add" id="addExpenseBtn">
 	</form>
 
 	<h2>Totals</h2>
