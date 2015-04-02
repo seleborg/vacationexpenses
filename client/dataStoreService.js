@@ -1,5 +1,5 @@
 angular.module('vacationExpenses.dataStoreService', [])
-	.factory('dataStore', ['$http', '$timeout', '$q', function ($http, $timeout, $q) {
+	.factory('dataStore', ['$http', '$interval', '$q', function ($http, $interval, $q) {
 		var delayInMillis = 1000;
 		var dataToStore;
 		var storeDefer;
@@ -72,11 +72,11 @@ angular.module('vacationExpenses.dataStoreService', [])
 
 
 		/**
-		 * Cancel the currently running $timeout.
+		 * Cancel the currently running $interval.
 		 */
 		function cancelRunningTimeout() {
 			if (angular.isDefined(runningTimeout)) {
-				$timeout.cancel(runningTimeout);
+				$interval.cancel(runningTimeout);
 				runningTimeout = undefined;
 			}
 		}
@@ -119,12 +119,20 @@ angular.module('vacationExpenses.dataStoreService', [])
 
 				if (!angular.isDefined(storeDefer)) {
 					storeDefer = $q.defer();
-					storePromise = adaptStorePromise(storeDefer);
+					storePromise = adaptStorePromise(storeDefer)
 				}
 
-				runningTimeout = $timeout(storeDelayedData, delayInMillis);
+				runningTimeout = $interval(storeDelayedData, delayInMillis);
 
 				return storePromise;
+			},
+
+
+			/**
+			 * Cancels running $interval and frees up resources.
+			 */
+			destroy: function () {
+				cancelRunningTimeout();
 			}
 		};
 

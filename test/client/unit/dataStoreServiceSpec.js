@@ -4,22 +4,24 @@ describe('vacationExpenses.dataStoreService', function () {
 	});
 
 	describe('dataStore', function () {
+		var FLUSH_INTERVAL;
 		var $httpBackend;
-		var $timeout;
+		var $interval;
 		var dataStore;
 
 		beforeEach(function () {
-			inject(function (_$httpBackend_, _$timeout_, _dataStore_) {
+			inject(function (_$httpBackend_, _$interval_, _dataStore_) {
 				$httpBackend = _$httpBackend_;
-				$timeout = _$timeout_;
+				$interval = _$interval_;
 				dataStore = _dataStore_;
+				FLUSH_INTERVAL = dataStore.delayInMillis;
 			});
 		});
 
 		afterEach(function() {
             $httpBackend.verifyNoOutstandingExpectation();
             $httpBackend.verifyNoOutstandingRequest();
-            $timeout.verifyNoPendingTasks();
+            dataStore.destroy();
         });
 
 		describe('fetch', function () {
@@ -30,7 +32,7 @@ describe('vacationExpenses.dataStoreService', function () {
 				dataStore.fetch('abcdefgh');
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 			});
 
 
@@ -39,7 +41,7 @@ describe('vacationExpenses.dataStoreService', function () {
 				dataStore.fetch('myBill').success(function () {}).error(function () {});
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 			});
 
 
@@ -53,7 +55,7 @@ describe('vacationExpenses.dataStoreService', function () {
 					.error(function () { errorCalled = true; });
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				expect(successCalled).toBe(true);
 				expect(errorCalled).toBe(false);
@@ -73,7 +75,7 @@ describe('vacationExpenses.dataStoreService', function () {
 					});
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				expect(successCalled).toBe(false);
 				expect(errorCalled).toBe(true);
@@ -97,7 +99,7 @@ describe('vacationExpenses.dataStoreService', function () {
 				promise.error(function () { errorCalledAgain = true; });
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				expect(successCalled).toBeTruthy();
 				expect(successCalledAgain).toBeTruthy();
@@ -115,10 +117,10 @@ describe('vacationExpenses.dataStoreService', function () {
 
 				dataStore.storeDelayed('abcdefgh', 'the data to store2');
 
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 			});
 
 
@@ -126,10 +128,10 @@ describe('vacationExpenses.dataStoreService', function () {
 				$httpBackend.expectPUT().respond(200);
 				dataStore.storeDelayed('myBill', '').success(function () {}).error(function () {});
 
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 			});
 
 
@@ -138,15 +140,15 @@ describe('vacationExpenses.dataStoreService', function () {
 				dataStore.storeDelayed('myBill', '').success(function () {}).error(function () {});
 
 				// ... and also not after a very short amount of time ...
-				$timeout.flush(dataStore.delayInMillis / 2);
+				$interval.flush(dataStore.delayInMillis / 2);
 
 				// ... but if we wait long enough, the request is sent out.
 				$httpBackend.expectPUT().respond(200);
 
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 			});
 
 
@@ -164,10 +166,10 @@ describe('vacationExpenses.dataStoreService', function () {
 						errorCalled = true;
 					});
 
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				expect(successCalled).toBeTruthy();
 				expect(errorCalled).toBeFalsy();
@@ -186,10 +188,10 @@ describe('vacationExpenses.dataStoreService', function () {
 						expect(status).toBe(404);
 					});
 
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				expect(successCalled).toBeFalsy();
 				expect(errorCalled).toBeTruthy();
@@ -200,9 +202,9 @@ describe('vacationExpenses.dataStoreService', function () {
 				$httpBackend.expectPUT().respond(200);
 				dataStore.storeDelayed('myBill');
 
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				var successCalled = false
 
@@ -212,12 +214,12 @@ describe('vacationExpenses.dataStoreService', function () {
 						successCalled = true;
 					});
 
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				expect(successCalled).toBeFalsy();
 
 				$httpBackend.flush();
-				$timeout.flush();
+				$interval.flush(FLUSH_INTERVAL);
 
 				expect(successCalled).toBeTruthy();
 			});

@@ -15,6 +15,11 @@ angular.module('vacationExpenses.billController', [
 		'$http',
 		'billService',
 		'dataStore', function ($scope, $location, $http, billService, dataStore) {
+
+		$scope.$on('$destroy', function (event) {
+			dataStore.destroy();
+		});
+
 		$scope.url = $location.path().split('/', 2)[1];
 
 		dataStore.fetch($scope.url)
