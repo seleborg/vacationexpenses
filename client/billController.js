@@ -28,6 +28,7 @@ angular.module('vacationExpenses.billController', [
 					$scope.bill = billService.createBill(data.bill);
 					$scope.bill.onUpdated($scope.onBillUpdated);
 					$scope.billLoaded = true;
+					$scope.newExpense = _createNewExpenseModel();
 				}
 			})
 			.error(function (status) {
@@ -60,14 +61,21 @@ angular.module('vacationExpenses.billController', [
 			$scope.bill.deleteExpense(index);
 		};
 
-		var EMPTY_EXPENSE = {
-			name: '',
-			amount: '',
-			currency: '',
-			purpose: ''
-		};
+		function _createNewExpenseModel() {
+			var lastUsedCurrency =
+				$scope.bill.expenses.length > 0
+				? $scope.bill.expenses[$scope.bill.expenses.length - 1].currency
+				: 'EUR';
 
-		$scope.newExpense = angular.copy(EMPTY_EXPENSE);
+			var newModel = {
+				name: '',
+				amount: '',
+				currency: lastUsedCurrency,
+				purpose: ''
+			};
+
+			return newModel;
+		}
 
 		$scope.addExpense = function () {
 			$scope.bill.addExpense(
@@ -76,6 +84,6 @@ angular.module('vacationExpenses.billController', [
 				$scope.newExpense.currency,
 				$scope.newExpense.purpose);
 
-			$scope.newExpense = angular.copy(EMPTY_EXPENSE);
+			$scope.newExpense = _createNewExpenseModel();
 		};
 	}]);
