@@ -1,4 +1,6 @@
 describe('vacationExpenses.expensesEditing', function () {
+	var newExpensesForm = element(by.id('newExpense'));
+
 	describe('New expense form', function () {
 		it('should add the expense at the end of the expenses list', function () {
 			browser.get('http://localhost:3000/example1');
@@ -15,6 +17,16 @@ describe('vacationExpenses.expensesEditing', function () {
 			expect(lastExpense.element(by.model('expense.amount')).getAttribute('value')).toEqual('100');
 			expect(lastExpense.element(by.model('expense.currency')).getAttribute('value')).toEqual('EUR');
 			expect(lastExpense.element(by.model('expense.purpose')).getAttribute('value')).toEqual('Protractor technology');
+		});
+
+
+		it('should not have an empty currency chooser', function () {
+			browser.get('http://localhost:3000/example1');
+
+			newExpensesForm.all(by.css('option')).each(function (element, index) {
+				expect(element.getText()).not.toEqual('');
+				expect(element.getAttribute('value')).not.toEqual('?');
+			});
 		});
 	});
 });
