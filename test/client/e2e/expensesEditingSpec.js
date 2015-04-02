@@ -1,5 +1,5 @@
 describe('vacationExpenses.expensesEditing', function () {
-	describe('Adding an expense', function () {
+	describe('New expense form', function () {
 		it('should add the expense at the end of the expenses list', function () {
 			browser.get('http://localhost:3000/example1');
 
