@@ -62,10 +62,15 @@ angular.module('vacationExpenses.billController', [
 		};
 
 		function _createNewExpenseModel() {
+			var lastUsedCurrency =
+				$scope.bill.expenses.length > 0
+				? $scope.bill.expenses[$scope.bill.expenses.length - 1].currency
+				: 'EUR';
+
 			var newModel = {
 				name: '',
 				amount: '',
-				currency: 'EUR',
+				currency: lastUsedCurrency,
 				purpose: ''
 			};
 
