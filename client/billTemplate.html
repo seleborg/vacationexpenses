@@ -82,14 +82,16 @@ Loading bill...
 		</div>
 	</div>
 
-	<form ng-submit="addExpense()">
-		<input type="text" ng-model="newExpense.name">
-		<input type="text" ng-model="newExpense.amount">
-		<select ng-options="code as code for (code, cur) in bill.currencies"
-				ng-model="newExpense.currency"></select>
-		<input type="text" ng-model="newExpense.purpose">
-		<input type="submit" value="Add" id="addExpenseBtn">
-	</form>
+	<div id="newExpense">
+		<form ng-submit="addExpense()">
+			<input type="text" ng-model="newExpense.name">
+			<input type="text" ng-model="newExpense.amount">
+			<select ng-options="code as code for (code, cur) in bill.currencies"
+					ng-model="newExpense.currency"></select>
+			<input type="text" ng-model="newExpense.purpose">
+			<input type="submit" value="Add" id="addExpenseBtn">
+		</form>
+	</div>
 
 	<h2>Totals</h2>
 	<div class="row" ng-controller="resultsController">
