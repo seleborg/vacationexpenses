@@ -1,0 +1,12 @@
+#createBillButton {
+	display: inline-block;
+	font-size: 24px;
+	padding: 14px;
+	background-color: blue;
+	color: white;
+	/*text-transform: uppercase;*/
+	cursor: pointer;
+	border: none;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

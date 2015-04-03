@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="vacationExpenses.homepageApp">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +8,11 @@
 	<title>Vacation Expenses</title>
 
 	<link href="lib/bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="client/homepage.css" rel="stylesheet">
+
+	<script src="lib/angular/angular.js"></script>
+	<script src="client/homepageApp.js"></script>
+	<script src="client/homepageController.js"></script>
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -16,10 +21,15 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-<body>
+<body class="container" ng-controller="homepageController">
 
 <h1>Vacation Expenses</h1>
 Find out who should pay what at the end of a common vacation.
+
+<p>
+<form ng-submit="createNewBill()">
+	<input type="submit" id="createBillButton" value="Create new bill">
+</form>
 
 <script src="lib/jquery-1.11.2.min.js"></script>
 </body>
