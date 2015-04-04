@@ -1,4 +1,5 @@
 var azureStorage = require('azure-storage');
+var random = require('random-js')();
 
 var tableService = azureStorage.createTableService();
 var entGen = azureStorage.TableUtilities.entityGenerator;
@@ -35,6 +36,16 @@ var testBills = {
 		}
 	}
 };
+
+
+// Replace the tableService object with another one, return
+// the old one.
+// Intended for testing.
+exports.installTableService = function (newService) {
+	var oldService = tableService;
+	tableService = newService;
+	return oldService;
+}
 
 
 // Fetch a bill given the bill's url.
@@ -78,6 +89,11 @@ exports.storeBill = function (url, data, callback) {
 }
 
 
+exports.createBill = function (data, callback) {
+	createBillInAzureStorage(data, callback);
+}
+
+
 function fetchBillFromAzureStorage(url, callback) {
 	var query = new azureStorage.TableQuery()
 		.where('PartitionKey eq ?', PARTITION_KEY)
@@ -115,5 +131,28 @@ function storeBillIntoAzureStorage(url, data, callback) {
 
 	tableService.updateEntity(TABLE_NAME, billEntity, function (error, result, response) {
 		callback(response.statusCode);
+	});
+}
+
+
+function createBillInAzureStorage(data, callback) {
+	var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var newId = random.string(10, alphabet);
+
+	var billEntity = {
+		PartitionKey: entGen.String(PARTITION_KEY),
+		RowKey: entGen.String(newId),
+		url: entGen.String(newId),
+		version: entGen.Int32(data.version),
+		bill: entGen.String(JSON.stringify(data.bill))
+	};
+
+	tableService.insertEntity(TABLE_NAME, billEntity, function (error, result, response) {
+		if (response.statusCode == 200) {
+			callback(201, newId);
+		}
+		else {
+			callback(response.statusCode, undefined);
+		}
 	});
 }
