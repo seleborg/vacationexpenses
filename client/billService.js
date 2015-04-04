@@ -38,13 +38,24 @@ angular.module('vacationExpenses.billService', [])
 		var billService = {};
 
 		billService.createBill = function (billData) {
-			var billObject = {
-				expenses: angular.copy(billData.expenses),
-				currencies: angular.copy(billData.currencies),
-				referenceCurrency: billData.referenceCurrency,
-				names: allNames(billData.expenses),
-				_updatedCallbacks: [],
-			};
+			if (angular.isDefined(billData)) {
+				var billObject = {
+					expenses: angular.copy(billData.expenses),
+					currencies: angular.copy(billData.currencies),
+					referenceCurrency: billData.referenceCurrency,
+					names: allNames(billData.expenses),
+					_updatedCallbacks: [],
+				};
+			}
+			else {
+				var billObject = {
+					expenses: [],
+					currencies: {
+						EUR: {inEUR: 1}
+					},
+					referenceCurrency: 'EUR'
+				};
+			}
 
 
 			billObject.onUpdated = function (callback) {
