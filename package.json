@@ -5,7 +5,9 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "test": "karma start test/karma.conf.js --single-run && protractor test/protractor.conf.js"
+    "test": "npm run client-unit-tests && npm run client-e2e-tests",
+    "client-unit-tests": "karma start test/karma.conf.js --single-run",
+    "client-e2e-tests": "protractor test/protractor.conf.js"
   },
   "repository": {
     "type": "git",
