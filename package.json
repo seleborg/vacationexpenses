@@ -6,9 +6,10 @@
   "scripts": {
     "preinstall": "npm install -g jasmine-node@1.14.5",
     "start": "node server/server.js",
-    "test": "npm run client-unit-tests && npm run client-e2e-tests",
+    "test": "npm run server-unit-tests && npm run client-unit-tests && npm run client-e2e-tests",
     "client-unit-tests": "karma start test/karma.conf.js --single-run",
-    "client-e2e-tests": "protractor test/protractor.conf.js"
+    "client-e2e-tests": "protractor test/protractor.conf.js",
+    "server-unit-tests": "jasmine-node test/server"
   },
   "repository": {
     "type": "git",
