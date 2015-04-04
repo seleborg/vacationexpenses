@@ -4,6 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
+    "preinstall": "npm install -g jasmine-node@1.14.5",
     "start": "node server/server.js",
     "test": "npm run client-unit-tests && npm run client-e2e-tests",
     "client-unit-tests": "karma start test/karma.conf.js --single-run",
