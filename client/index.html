@@ -28,11 +28,20 @@
 Find out who should pay what at the end of a common vacation.
 
 <p>
-<form ng-submit="createNewBill()">
-	<input type="submit" id="createBillButton" value="Create new bill">
-</form>
-<div class="alert alert-danger" ng-if="createBillError != undefined">
-	Oops, something went wrong (error code {{createBillError}}). Want to try again?
+<div class="jumbotron row">
+	<div class="lead">Create a bill</div>
+	<div>It's free, no account required.</div>
+	<form ng-submit="createNewBill()">
+		<input
+			type="submit"
+			class="btn btn-primary btn-lg"
+			id="createBillButton"
+			value="Get started">
+	</form>
+
+	<div class="alert alert-danger" ng-if="createBillError != undefined">
+		Oops, something went wrong (error code {{createBillError}}). Want to try again?
+	</div>
 </div>
 
 <script src="lib/jquery-1.11.2.min.js"></script>
