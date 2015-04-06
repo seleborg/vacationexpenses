@@ -20,7 +20,7 @@ describe('vacationExpenses.expensesEditing', function () {
 		});
 
 
-		it('should not have an empty currency chooser', function () {
+		it('should not have an empty currency chooser on any expense line', function () {
 			browser.get('http://localhost:3000/example1');
 
 			newExpensesForm.all(by.css('option')).each(function (element, index) {
