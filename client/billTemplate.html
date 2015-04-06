@@ -98,7 +98,7 @@ Loading bill...
 	</div>
 
 	<h2>Totals</h2>
-	<div class="row" ng-controller="resultsController">
+	<div class="row" ng-controller="resultsController" id="totals">
 		<div class="col-md-8">
 			<table class="table table-striped">
 				<thead>
@@ -115,7 +115,8 @@ Loading bill...
 						<td><span>{{name}}</span></td>
 						<td><select
 							ng-options="code as code for (code, cur) in bill.currencies"
-							ng-model="preferredCurrency[name]"></select></td>
+							ng-model="preferredCurrency[name]"
+							id="currency-chooser"></select></td>
 						<td><span>{{results[name].totalPaid | ve_currency : preferredCurrency[name]}}</span></td>
 						<td><span>{{results[name].totalDue  | ve_currency : preferredCurrency[name]}}</span></td>
 						<td><span ng-if="results[name].balance <= 0">{{-results[name].balance   | ve_currency : preferredCurrency[name]}}</span></td>

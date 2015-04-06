@@ -34,6 +34,19 @@ var testBills = {
 			},
 			referenceCurrency: 'EUR'
 		}
+	},
+
+	'empty': {
+		status: 200,
+		version: 1,
+		locked: true,
+		bill: {
+			expenses: [],
+			currencies: {
+				EUR: { inEUR: 1 }
+			},
+			referenceCurrency: 'EUR'
+		}
 	}
 };
 
