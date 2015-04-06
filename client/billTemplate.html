@@ -88,11 +88,11 @@ Loading bill...
 
 	<div id="newExpense">
 		<form ng-submit="addExpense()">
-			<input type="text" ng-model="newExpense.name">
-			<input type="text" ng-model="newExpense.amount">
+			<input type="text" ng-model="newExpense.name" placeholder="John">
+			<input type="text" ng-model="newExpense.amount" placeholder="45.99">
 			<select ng-options="code as code for (code, cur) in bill.currencies"
 					ng-model="newExpense.currency"></select>
-			<input type="text" ng-model="newExpense.purpose">
+			<input type="text" ng-model="newExpense.purpose" placeholder="Drinks on Saturday">
 			<input type="submit" value="Add" id="addExpenseBtn">
 		</form>
 	</div>
@@ -152,7 +152,8 @@ Loading bill...
 								type="text"
 								ng-model="newCurrency"
 								id="new-currency"
-								ng-disabled="isFetchingExchangeRate"></td>
+								ng-disabled="isFetchingExchangeRate"
+								placeholder="USD"></td>
 							<td><input
 								type="submit"
 								value="Add"
