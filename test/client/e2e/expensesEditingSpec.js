@@ -46,5 +46,23 @@ describe('vacationExpenses.expensesEditing', function () {
 
 			expect(element(by.model('newExpense.currency')).getAttribute('value')).toEqual('EUR');
 		});
+
+
+		it('should not have an empty currency chooser in the results panel', function () {
+			browser.get('http://localhost:3000/empty');
+
+			element(by.model('newExpense.name')).sendKeys('Alice');
+			element(by.model('newExpense.amount')).sendKeys('100');
+			element(by.model('newExpense.currency')).sendKeys('EUR');
+			element(by.model('newExpense.purpose')).sendKeys('Protractor technology');
+			element(by.id('addExpenseBtn')).click();
+
+			element.all(by.css('#totals #currency-chooser')).then(function (choosers) {
+				for (var i = 0; i < choosers.length; ++i) {
+					var chooser = choosers[i];
+					expect(chooser.getAttribute('value')).toEqual('EUR');
+				}
+			});
+		});
 	});
 });

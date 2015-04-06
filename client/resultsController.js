@@ -38,7 +38,7 @@ angular.module('vacationExpenses.resultsController', [])
 			$scope.results = {};
 			angular.forEach($scope.bill.names, function (name) {
 				if (!angular.isDefined($scope.preferredCurrency[name])) {
-					$scope.preferredCurrency[name] = 'USD';
+					$scope.preferredCurrency[name] = $scope.bill.referenceCurrency;
 				}
 
 				var paid = $scope.bill.calculatePaid(name, $scope.preferredCurrency[name]);
