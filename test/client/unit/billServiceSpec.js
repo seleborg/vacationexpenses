@@ -9,6 +9,14 @@ describe('vacationExpenses.billService', function () {
 
 		describe('createBill', function () {
 			it('can create a new bill', function () {
+				var bill = billService.createBill();
+				expect(bill.expenses.length).toEqual(0);
+				expect(bill.currencies.EUR).toBeDefined();
+				expect(bill.referenceCurrency).toEqual('EUR');
+			});
+
+
+			it('can create a new bill from passed data', function () {
 				var billData = {expenses: [
 					{ name: "Joe", amount: 10,
 						sharingModel: { equalShares: true, shares: {Sara: 1}}}

@@ -26,6 +26,15 @@ app.put('/api/v1/bills/*', function (req, res) {
 		res.status(status).end();
 	});
 });
+app.post('/api/v1/bills', function (req, res) {
+	var billData = req.body.billData;
+	storage.createBill(billData, function (status, url) {
+		if (status == 201) {
+			res.header('Location', '/' + url);
+		}
+		res.status(status).end();
+	})
+});
 
 app.use('/client', express.static(path.resolve(SERVER_ROOT, 'client')));
 app.use('/lib', express.static(path.resolve(SERVER_ROOT, 'lib')));

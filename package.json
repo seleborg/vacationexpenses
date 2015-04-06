@@ -4,8 +4,12 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
+    "preinstall": "npm install -g jasmine-node@1.14.5",
     "start": "node server/server.js",
-    "test": "karma start test/karma.conf.js --single-run && protractor test/protractor.conf.js"
+    "test": "npm run server-unit-tests && npm run client-unit-tests && npm run client-e2e-tests",
+    "client-unit-tests": "karma start test/karma.conf.js --single-run",
+    "client-e2e-tests": "protractor test/protractor.conf.js",
+    "server-unit-tests": "jasmine-node test/server"
   },
   "repository": {
     "type": "git",
@@ -32,6 +36,7 @@
     "karma": "^0.12.31",
     "karma-chrome-launcher": "^0.1.7",
     "karma-jasmine": "^0.3.5",
-    "protractor": "^2.0.0"
+    "protractor": "^2.0.0",
+    "random-js": "^1.0.4"
   }
 }

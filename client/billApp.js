@@ -1,4 +1,4 @@
-angular.module('vacationExpenses.app', [
+angular.module('vacationExpenses.billApp', [
 	'vacationExpenses.billController',
 	'vacationExpenses.expenseController',
 	'vacationExpenses.resultsController',
