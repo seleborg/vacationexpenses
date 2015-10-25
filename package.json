@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "preinstall": "npm install -g jasmine-node@1.14.5",
+    "setup-dev-env": "npm install -g karma-cli@0.1.1 jasmine-node@1.14.5 protractor@2.0.0 && webdriver-manager update --standalone",
     "start": "node server/server.js",
     "test": "npm run server-unit-tests && npm run client-unit-tests && npm run client-e2e-tests",
     "client-unit-tests": "karma start test/karma.conf.js --single-run",
