@@ -7,6 +7,7 @@ import Html.Attributes
 import Json.Decode
 import List
 import Maybe
+import Set
 import StartApp.Simple
 import String
 
@@ -55,7 +56,8 @@ viewExpense expense =
 view : Signal.Address Action -> Model -> Html.Html
 view address model =
   Html.div []
-  [ Html.div [] [ Html.ol [] (List.map viewExpense model.bill.expenses) ]
+  [ Html.h1 [] [Html.text "Expenses"]
+  , Html.div [] [ Html.ol [] (List.map viewExpense model.bill.expenses) ]
   , Html.form
     [ Html.Events.onWithOptions
         "submit"
@@ -80,6 +82,14 @@ view address model =
       ]
       []
     , Html.button [] [Html.text "Add"]]
+  , Html.div []
+    [ Html.h1 [] [Html.text "Participants"]
+    , Html.ul
+        []
+        (Bill.names model.bill
+        |> Set.toList
+        |> List.map (\name -> Html.li [] [Html.text name]))
+    ]
   ]
 
 

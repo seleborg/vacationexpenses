@@ -1,11 +1,14 @@
-module Bill (Expense, Bill, addExpense, makeExpense, newBill) where
+module Bill (Expense, Bill, addExpense, makeExpense, names, newBill) where
 
 {-| Library for Bill object and all its sub-objects.
 
 # Definition
-@docs Bill, Expense, addExpense, makeExpense, newBill
+@docs Bill, Expense, addExpense, makeExpense, names, newBill
 
 -}
+
+import Set
+
 
 {-| An Expense is a single record of expense.
 -}
@@ -38,3 +41,10 @@ newBill : Bill
 newBill =
   { expenses = []
   }
+
+
+{-| Returns the set of names of all participants in the bill.
+-}
+names : Bill -> Set.Set String
+names bill =
+  List.foldl Set.insert Set.empty (List.map .name bill.expenses)
