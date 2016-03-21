@@ -11,6 +11,7 @@ module Bill (Expense, Bill, addExpense) where
 -}
 type alias Expense =
   { name : String
+  , amount : Float
   }
 
 
