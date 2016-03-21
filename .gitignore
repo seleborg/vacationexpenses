@@ -24,3 +24,7 @@ build/Release
 
 # Typings directory when VSCode installs typescript definitions
 typings
+
+# Elm-generated files
+client/elm-stuff
+client/elm.js
