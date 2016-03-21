@@ -1,6 +1,7 @@
 module BillPage where
 
 import Debug
+import Dict
 import Html
 import Html.Events
 import Html.Attributes
@@ -86,9 +87,12 @@ view address model =
     [ Html.h1 [] [Html.text "Participants"]
     , Html.ul
         []
-        (Bill.names model.bill
-        |> Set.toList
-        |> List.map (\name -> Html.li [] [Html.text name]))
+        (Bill.balances model.bill
+        |> Dict.toList
+        |> List.map
+          (\(name, balance) ->
+            Html.li []
+            [Html.text (name ++ (Basics.toString balance))]))
     ]
   ]
 
