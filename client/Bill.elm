@@ -1,9 +1,9 @@
-module Bill (Expense, Bill, addExpense) where
+module Bill (Expense, Bill, addExpense, makeExpense, newBill) where
 
 {-| Library for Bill object and all its sub-objects.
 
 # Definition
-@docs Bill, Expense, addExpense
+@docs Bill, Expense, addExpense, makeExpense, newBill
 
 -}
 
@@ -24,8 +24,17 @@ type alias Bill =
 
 {-| Returns a new bill with the given expense added to it.
 -}
-addExpense : Bill -> Expense -> Bill
-addExpense bill expense =
+addExpense : Expense -> Bill -> Bill
+addExpense expense bill =
   { bill | expenses = bill.expenses ++ [expense] }
 
 
+makeExpense : String -> Float -> Expense
+makeExpense name amount =
+    { name = name, amount = amount }
+
+
+newBill : Bill
+newBill =
+  { expenses = []
+  }

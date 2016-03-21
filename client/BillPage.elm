@@ -34,11 +34,9 @@ type Action =
 init : Model
 init =
   { bill =
-    { expenses =
-      [ { name = "John", amount = 50 }
-      , { name = "Jack", amount = 10 }
-      ]
-    }
+    Bill.newBill
+    |> Bill.addExpense (Bill.makeExpense "John" 50)
+    |> Bill.addExpense (Bill.makeExpense "Jack" 10)
   , newExpense =
     { name = ""
     , amount = ""
@@ -107,7 +105,7 @@ update action model =
         newExpense = { name = name, amount = amount }
       in
         { model
-          | bill = (Bill.addExpense model.bill newExpense)
+          | bill = (Bill.addExpense newExpense model.bill)
           , newExpense = { name = "", amount = "" }
         }
 
